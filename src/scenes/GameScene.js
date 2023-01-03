@@ -3,6 +3,7 @@ import Scene from "../components/Scene";
 import { db } from "../database";
 import { EndScene } from "./EndScene";
 import IMAGE_BALL from "../../img/ball.png";
+import { Text } from "../components/Text";
 
 export class GameScene extends Scene {
   // ボールを宣言する
@@ -38,16 +39,7 @@ export class GameScene extends Scene {
     );
     this.instantiate(this.ball); // ボールをシーンに追加
 
-    // テキストに関するパラメータを定義する(ここで定義した意外にもたくさんパラメータがある)
-    const textStyle = new PIXI.TextStyle({
-      fontFamily: "Arial", // フォント
-      fontSize: 20, // フォントサイズ
-      fill: 0xffffff, // 色(16進数で定義するので#ffffffと書かずに0xffffffと書く)
-      dropShadow: true, // ドロップシャドウを有効にする（右下に影をつける）
-      dropShadowDistance: 2, // ドロップシャドウの影の距離
-    });
-
-    this.scoreboard = new PIXI.Text("SCORE:0", textStyle); //スコア表示テキスト
+    this.scoreboard = new Text("SCORE:0", 20, 0xffffff, true); // スコア表示テキスト
     this.instantiate(this.scoreboard); // スコア表示テキストを画面に追加する
   }
   update() {

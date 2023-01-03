@@ -1,8 +1,8 @@
-import * as PIXI from "pixi.js";
 import { Button } from "../components/Button";
 import { db } from "../database";
 import Scene from "../components/Scene";
 import { GameScene } from "./GameScene";
+import { Text } from "../components/Text";
 
 /**
  * ゲームの結果画面シーンを生成する関数
@@ -17,18 +17,8 @@ export class EndScene extends Scene {
     super();
   }
   async start() {
-    // テキストに関するパラメータを定義する(ここで定義した意外にもたくさんパラメータがある)
-    const textStyle = new PIXI.TextStyle({
-      fontFamily: "Arial", // フォント
-      fontSize: 32, // フォントサイズ
-      fill: 0xfcbb08, // 色(16進数で定義する これはオレンジ色)
-      dropShadow: true, // ドロップシャドウを有効にする（右下に影をつける）
-      dropShadowDistance: 2, // ドロップシャドウの影の距離
-    });
-
     // テキストオブジェクトの定義
-    this.message = new PIXI.Text(`SCORE:${db.score}で力尽きた`, textStyle); // 結果画面のテキスト
-    this.message.anchor.x = 0.5; // アンカーのxを中央に指定
+    this.message = new Text(`SCORE:${db.score}で力尽きた`, 32, 0xfcbb08); // 結果画面のテキスト
     this.message.x = 200; // 座標指定 (xのアンカーが0.5で中央指定なので、テキストのx値を画面中央にすると真ん中にテキストが表示される)
     this.message.y = 200; // 座標指定 (yのアンカーはデフォルトの0なので、画面上から200の位置にテキスト表示)
     this.instantiate(this.message); // 結果画面シーンにテキスト追加

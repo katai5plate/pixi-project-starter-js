@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { Text } from "./Text";
 
 /**
  * ボタンを生成してオブジェクトを返す
@@ -21,18 +22,7 @@ export class Button extends PIXI.Container {
     backColor.on("pointerdown", onClick); // クリック時にonClickの関数を実行する
     this.addChild(backColor); // 背景をボタンコンテナに追加
 
-    // テキストに関するパラメータを定義する(ここで定義した意外にもたくさんパラメータがある)
-    const textStyle = new PIXI.TextStyle({
-      fontFamily: "Arial", // フォント
-      fontSize: fontSize, // フォントサイズ
-      fill: 0xffffff, // 色(16進数で定義するので#ffffffと書かずに0xffffffと書く)
-      dropShadow: true, // ドロップシャドウを有効にする（右下に影をつける）
-      dropShadowDistance: 2, // ドロップシャドウの影の距離
-    });
-
-    const buttonText = new PIXI.Text(text, textStyle); // テキストオブジェクトをtextStyleのパラメータで定義
-    buttonText.anchor.x = 0.5; // アンカーを中央に設置する(アンカーは0~1を指定する)
-    buttonText.anchor.y = 0.5; // アンカーを中央に設置する(アンカーは0~1を指定する)
+    const buttonText = new Text(text, fontSize, 0xffffff); // テキストオブジェクトを定義
     buttonText.x = width / 2; // ボタン中央にテキストを設置するため、width/2の値をx値に指定
     buttonText.y = height / 2; // ボタン中央テキストを設置するため、height/2の値をy値に指定
     this.addChild(buttonText); // ボタンテキストをボタンコンテナに追加
