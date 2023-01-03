@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { Button } from "../prefabs/Button";
 import saves from "../store/saves";
 import Scene from "../prefabs/Scene";
-import { GameScene } from "./game";
+import { GameScene } from "./GameScene";
 
 /**
  * ゲームの結果画面シーンを生成する関数
