@@ -55,7 +55,7 @@ export class Rigidbody {
     // 速度を加算
     this.position = this.position.add(this.velocity.x, this.velocity.y);
     // y の速度に足していくと、重力みたいな挙動になる
-    this.velocity = this.velocity.add(null, this.#gravity);
+    this.velocity = this.velocity.toDown(this.#gravity);
     // 事前に登録したコールバックを実行
     this.#onUpdatePhysics(this);
   }
