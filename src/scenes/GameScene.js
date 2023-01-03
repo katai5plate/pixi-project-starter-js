@@ -56,8 +56,8 @@ export class GameScene extends Scene {
         // 速度を反転して反射の挙動にする
         this.ball.velocity = this.ball.velocity.flipX();
       }
-      if (this.ball.position.y >= 600) {
-        // 球が画面下に消えたら
+      // 球が画面下に消えたら
+      if (this.ball.position.y >= db.app.screen.bottom) {
         new EndScene(); // 結果画面に遷移する
       }
     });
