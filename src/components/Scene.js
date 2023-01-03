@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import app from "../store/app";
-import saves from "../store/saves";
+import app from "../managers/app";
+import saves from "../managers/saves";
 
 export default class Scene {
   // ゲーム用のシーンを生成

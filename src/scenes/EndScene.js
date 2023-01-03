@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import { Button } from "../prefabs/Button";
-import saves from "../store/saves";
-import Scene from "../prefabs/Scene";
+import { Button } from "../components/Button";
+import saves from "../managers/saves";
+import Scene from "../components/Scene";
 import { GameScene } from "./GameScene";
 
 /**

@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import Scene from "../prefabs/Scene";
-import saves from "../store/saves";
+import Scene from "../components/Scene";
+import saves from "../managers/saves";
 import { EndScene } from "./EndScene";
 import IMAGE_BALL from "../../img/ball.png";
 

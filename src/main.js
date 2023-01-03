@@ -1,4 +1,4 @@
-import Scene from "./prefabs/Scene";
+import Scene from "./components/Scene";
 import { GameScene } from "./scenes/GameScene";
 
 const main = async () => {
