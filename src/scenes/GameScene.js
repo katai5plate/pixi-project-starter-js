@@ -72,7 +72,7 @@ export class GameScene extends Scene {
     this.ballVy += 0.1; // yの速度に0.1を足していくと、重力みたいな挙動になる
     if (this.ball.y >= 600) {
       // 球が画面下に消えたら
-      new EndScene(); // 結果画面を表示する
+      new EndScene(); // 結果画面に遷移する
     }
   }
 }

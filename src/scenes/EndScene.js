@@ -38,7 +38,7 @@ export class EndScene extends Scene {
      */
     this.retryButton = new Button("もう一度", 100, 60, 0xff0000, () => {
       // クリックした時の処理
-      new GameScene(); // ゲームシーンを生成する
+      new GameScene(); // ゲームシーンに遷移する
     });
     this.retryButton.x = 50; // ボタンの座標指定
     this.retryButton.y = 500; // ボタンの座標指定
