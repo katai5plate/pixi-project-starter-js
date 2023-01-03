@@ -48,4 +48,28 @@ export class Vector2 extends PIXI.Point {
   clone() {
     return new Vector2(this.x, this.y);
   }
+  /** X を逆転する */
+  flipX() {
+    return this.mul(-1, null);
+  }
+  /** Y を逆転する */
+  flipY() {
+    return this.mul(null, -1);
+  }
+  /** 上に移動する */
+  toUp(value) {
+    return this.sub(null, value);
+  }
+  /** 下に移動する */
+  toDown(value) {
+    return this.add(null, value);
+  }
+  /** 左に移動する */
+  toLeft(value) {
+    return this.sub(value, null);
+  }
+  /** 右に移動する */
+  toRight(value) {
+    return this.add(value, null);
+  }
 }

@@ -47,14 +47,14 @@ export class GameScene extends Scene {
           null
         );
         // 速度を反転して反射の挙動にする
-        this.ball.velocity = this.ball.velocity.mul(-1, null);
+        this.ball.velocity = this.ball.velocity.flipX();
       }
       // ボールの左端が画面左端に満たなくなった場合
       if (this.ball.rect.left < db.app.screen.left) {
         // x の値を画面左端にする(次のフレームで反射処理させないために必要)
         this.ball.position = this.ball.position.set(db.app.screen.left, null);
         // 速度を反転して反射の挙動にする
-        this.ball.velocity = this.ball.velocity.mul(-1, null); // 速度を反転して反射の挙動にする
+        this.ball.velocity = this.ball.velocity.flipX();
       }
       if (this.ball.position.y >= 600) {
         // 球が画面下に消えたら
