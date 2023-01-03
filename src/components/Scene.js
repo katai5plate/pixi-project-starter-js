@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import { db } from "../database";
+import { Rigidbody } from "./Rigidbody";
 
 export default class Scene {
   // ゲーム用のシーンを生成
@@ -19,8 +20,16 @@ export default class Scene {
     // update関数を毎フレーム実行にする
     db.app.addGameLoop(() => this.update());
   }
+  /**
+   * シーンにオブジェクトを描画
+   * @param {Rigidbody | PIXI.DisplayObject} obj
+   */
   instantiate(obj) {
-    this.scene.addChild(obj);
+    if (obj instanceof Rigidbody) {
+      this.scene.addChild(obj.sprite);
+    } else {
+      this.scene.addChild(obj);
+    }
   }
   async start() {}
   update() {}

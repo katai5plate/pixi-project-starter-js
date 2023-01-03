@@ -4,17 +4,20 @@ import { db } from "../database";
 import { EndScene } from "./EndScene";
 import IMAGE_BALL from "../../img/ball.png";
 import { Text } from "../components/Text";
+import { Rigidbody } from "../components/Rigidbody";
+import { Vector2 } from "../components/Vector2";
 
 export class GameScene extends Scene {
-  // ボールを宣言する
-  ball = new PIXI.Sprite();
-  // スコアボードを宣言する
-  scoreboard = new PIXI.Text();
-
-  // ボールの毎フレーム動くx方向
-  ballVx = 5;
-  // ボールの毎フレーム動くy方向
-  ballVy = 0;
+  /**
+   * ボール
+   * @type {Rigidbody}
+   */
+  ball;
+  /**
+   * スコアボード
+   * @type {Text}
+   */
+  scoreboard;
 
   constructor() {
     super();
@@ -22,24 +25,46 @@ export class GameScene extends Scene {
   async start() {
     // スコアを初期化する
     db.score = 0;
-    // ボール画像を表示するスプライトオブジェクトを実体化させる
-    this.ball = new PIXI.Sprite(
-      //引数では、テクスチャのプリロードを行う
+    // ボール画像を表示するスプライトをゲームオブジェクト化
+    this.ball = Rigidbody.fromTexture(
+      // await でテクスチャのプリロードを行う
       await PIXI.Texture.fromLoader(IMAGE_BALL)
     );
-    this.ball.x = 200; // x座標
-    this.ball.y = 500; // y座標
-    this.ball.interactive = true; // クリック可能にする
-    this.ball.on("pointerdown", () =>
-      // クリック時に発動する関数
-      {
-        db.score++; // スコアを１増やす
-        this.ballVy = -8; // ボールのＹ速度を-8にする(上に飛ぶようにしている)
+    this.ball.position = new Vector2(200, 500);
+    this.ball.velocity = new Vector2(5, 0);
+    // クリック時に発動する関数
+    this.ball.on("pointerdown", () => {
+      db.score++; // スコアを１増やす
+      this.ball.velocity = this.ball.velocity.set(null, -8); // ボールのＹ速度を-8にする(上に飛ぶようにしている)
+    });
+    // 物理エンジン実行中に毎フレーム発動する関数
+    this.ball.onUpdatePhysics(() => {
+      // ボールの右端が画面右端を超えた場合
+      if (this.ball.rect.right > db.app.screen.right) {
+        // x の値を「画面右端 - ボールの幅」にする(次のフレームで反射処理させないために必要)
+        this.ball.position = this.ball.position.set(
+          db.app.screen.right - this.ball.rect.width,
+          null
+        );
+        // 速度を反転して反射の挙動にする
+        this.ball.velocity = this.ball.velocity.mul(-1, null);
       }
-    );
+      // ボールの左端が画面左端に満たなくなった場合
+      if (this.ball.rect.left < db.app.screen.left) {
+        // x の値を画面左端にする(次のフレームで反射処理させないために必要)
+        this.ball.position = this.ball.position.set(db.app.screen.left, null);
+        // 速度を反転して反射の挙動にする
+        this.ball.velocity = this.ball.velocity.mul(-1, null); // 速度を反転して反射の挙動にする
+      }
+      if (this.ball.position.y >= 600) {
+        // 球が画面下に消えたら
+        new EndScene(); // 結果画面に遷移する
+      }
+    });
     this.instantiate(this.ball); // ボールをシーンに追加
 
-    this.scoreboard = new Text("SCORE:0", 20, 0xffffff, true); // スコア表示テキスト
+    // スコア表示テキスト
+    this.scoreboard = new Text("SCORE:0", 20, 0xffffff, true);
     this.instantiate(this.scoreboard); // スコア表示テキストを画面に追加する
   }
   update() {
@@ -49,22 +74,7 @@ export class GameScene extends Scene {
 
     if (db.score === 0) return; // スコアが０の時(球に触っていないとき)はここで終了させる
 
-    this.ball.x += this.ballVx; // ボールに速度を加算
-    this.ball.y += this.ballVy; // ボールに速度を加算
-    if (this.ball.x > 340) {
-      // ボールが右端に到達したら(画面横幅400,球横幅60、アンカーは左上なので400-60=340の位置で球が右端に触れる)
-      this.ball.x = 340; // xの値を340にする(次のフレームで反射処理させないために必要)
-      this.ballVx = -this.ballVx; // 速度を反転して反射の挙動にする
-    }
-    if (this.ball.x < 0) {
-      // ボールが左端に到達したら(アンカーは左上なので、0の位置で球が左端に触れる)
-      this.ball.x = 0; // xの値を0にする(次のフレームで反射処理させないために必要)
-      this.ballVx = -this.ballVx; // 速度を反転して反射の挙動にする
-    }
-    this.ballVy += 0.1; // yの速度に0.1を足していくと、重力みたいな挙動になる
-    if (this.ball.y >= 600) {
-      // 球が画面下に消えたら
-      new EndScene(); // 結果画面に遷移する
-    }
+    // ボールの物理挙動を毎フレームアップデートする
+    this.ball.updatePhysics();
   }
 }
