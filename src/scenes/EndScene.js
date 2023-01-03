@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Button } from "../components/Button";
-import saves from "../managers/saves";
+import { db } from "../database";
 import Scene from "../components/Scene";
 import { GameScene } from "./GameScene";
 
@@ -27,7 +27,7 @@ export class EndScene extends Scene {
     });
 
     // テキストオブジェクトの定義
-    this.message = new PIXI.Text(`SCORE:${saves.score}で力尽きた`, textStyle); // 結果画面のテキスト
+    this.message = new PIXI.Text(`SCORE:${db.score}で力尽きた`, textStyle); // 結果画面のテキスト
     this.message.anchor.x = 0.5; // アンカーのxを中央に指定
     this.message.x = 200; // 座標指定 (xのアンカーが0.5で中央指定なので、テキストのx値を画面中央にすると真ん中にテキストが表示される)
     this.message.y = 200; // 座標指定 (yのアンカーはデフォルトの0なので、画面上から200の位置にテキスト表示)
@@ -38,7 +38,7 @@ export class EndScene extends Scene {
      */
     this.retryButton = new Button("もう一度", 100, 60, 0xff0000, () => {
       // クリックした時の処理
-      Scene.loadScene(GameScene); // ゲームシーンを生成する
+      new GameScene(); // ゲームシーンを生成する
     });
     this.retryButton.x = 50; // ボタンの座標指定
     this.retryButton.y = 500; // ボタンの座標指定
@@ -52,7 +52,7 @@ export class EndScene extends Scene {
       //結果ツイート時にURLを貼るため、このゲームのURLをここに記入してURLがツイート画面に反映されるようにエンコードする
       const url = encodeURI("https://hothukurou.com"); // ツイートに載せるURLを指定(文字はエンコードする必要がある)
       window.open(
-        `http://twitter.com/intent/tweet?text=SCORE:${saves.score}点で力尽きた&hashtags=sample&url=${url}`
+        `http://twitter.com/intent/tweet?text=SCORE:${db.score}点で力尽きた&hashtags=sample&url=${url}`
       ); //ハッシュタグをsampleにする
     });
     this.tweetButton.x = 250; // ボタンの座標指定

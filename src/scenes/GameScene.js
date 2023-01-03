@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import Scene from "../components/Scene";
-import saves from "../managers/saves";
+import { db } from "../database";
 import { EndScene } from "./EndScene";
 import IMAGE_BALL from "../../img/ball.png";
 
@@ -20,7 +20,7 @@ export class GameScene extends Scene {
   }
   async start() {
     // スコアを初期化する
-    saves.score = 0;
+    db.score = 0;
     // ボール画像を表示するスプライトオブジェクトを実体化させる
     this.ball = new PIXI.Sprite(
       //引数では、テクスチャのプリロードを行う
@@ -32,7 +32,7 @@ export class GameScene extends Scene {
     this.ball.on("pointerdown", () =>
       // クリック時に発動する関数
       {
-        saves.score++; // スコアを１増やす
+        db.score++; // スコアを１増やす
         this.ballVy = -8; // ボールのＹ速度を-8にする(上に飛ぶようにしている)
       }
     );
@@ -53,9 +53,9 @@ export class GameScene extends Scene {
   update() {
     // 毎フレームごとに処理するゲームループ
     // スコアテキストを毎フレームアップデートする
-    this.scoreboard.text = `SCORE:${saves.score}`;
+    this.scoreboard.text = `SCORE:${db.score}`;
 
-    if (saves.score === 0) return; // スコアが０の時(球に触っていないとき)はここで終了させる
+    if (db.score === 0) return; // スコアが０の時(球に触っていないとき)はここで終了させる
 
     this.ball.x += this.ballVx; // ボールに速度を加算
     this.ball.y += this.ballVy; // ボールに速度を加算
@@ -72,7 +72,7 @@ export class GameScene extends Scene {
     this.ballVy += 0.1; // yの速度に0.1を足していくと、重力みたいな挙動になる
     if (this.ball.y >= 600) {
       // 球が画面下に消えたら
-      Scene.loadScene(EndScene); // 結果画面を表示する
+      new EndScene(); // 結果画面を表示する
     }
   }
 }
