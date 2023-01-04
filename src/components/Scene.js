@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { db } from "../database";
-import { Rigidbody } from "./Rigidbody";
+import { GameObject } from "./GameObject";
 
 export default class Scene {
   // ゲーム用のシーンを生成
@@ -22,10 +22,10 @@ export default class Scene {
   }
   /**
    * シーンにオブジェクトを描画
-   * @param {Rigidbody | PIXI.DisplayObject} obj
+   * @param {GameObject | PIXI.DisplayObject} obj
    */
   instantiate(obj) {
-    if (obj instanceof Rigidbody) {
+    if (obj instanceof GameObject) {
       this.scene.addChild(obj.sprite);
     } else {
       this.scene.addChild(obj);
