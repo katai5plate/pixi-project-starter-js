@@ -48,6 +48,8 @@ export default class Scene {
   }
   /** プリロード済のテクスチャを呼び出す */
   getTexture(path) {
+    if (!this.#cachedTextures.has(path))
+      throw new Error(`プリロードが行われていない Texture です: ${path}`);
     return this.#cachedTextures.get(path);
   }
   /**
