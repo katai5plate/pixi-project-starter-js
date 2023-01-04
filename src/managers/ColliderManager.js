@@ -4,14 +4,8 @@ import * as PIXI from "pixi.js";
 export class ColliderManager {
   /** @type {PIXI.DisplayObject} */
   #targetSprite;
-  constructor(targetSprite, isButtonMode = false, cursor = "default") {
+  constructor(targetSprite) {
     this.#targetSprite = targetSprite;
-
-    // クリック可能にする
-    if (isButtonMode) {
-      this.#targetSprite.interactive = !!isButtonMode;
-      if (cursor) this.#targetSprite.cursor = cursor;
-    }
     this.collision = this.rect;
   }
   /** 当たり判定の厳密な範囲 */

@@ -21,19 +21,18 @@ export class GameScene extends Scene {
   scoreboard;
 
   constructor() {
-    super();
+    super([
+      // プリロードするテクスチャ
+      IMAGE_BALL,
+    ]);
   }
   async start() {
     // スコアを初期化する
     db.score = 0;
     // ボール画像を表示するスプライトをゲームオブジェクト化
-    this.ball = new GameObject(
-      new PIXI.Sprite(
-        await PIXI.Texture.fromLoader(IMAGE_BALL) // await でテクスチャのプリロードを行う
-      ),
-      true,
-      "pointer"
-    );
+    this.ball = new GameObject();
+    this.ball.setDisplayObject(new PIXI.Sprite(this.getTexture(IMAGE_BALL)));
+    // ボールの物理挙動を設定する
     this.ball.setPhysics({
       position: () => new Vector2(200, 500),
       velocity: () => new Vector2(5, 0),
@@ -68,12 +67,14 @@ export class GameScene extends Scene {
         }
       },
     });
-    // マウスの当たり判定を円形にする
+    // 当たり判定を円形にする
     this.ball.setColliderArea(
       ColliderManager.boxToCircle(0, 0, this.ball.rect.width)
     );
+    // マウスでクリックできるようにする
+    this.ball.setButtonMode(true, "pointer");
     // クリック時に発動する関数
-    this.ball.sprite.on("pointerdown", () => {
+    this.ball.on("pointerdown", () => {
       db.score++; // スコアを１増やす
       this.ball.setPhysics({
         // ボールのＹ速度を-8にする(上に飛ぶようにしている)
