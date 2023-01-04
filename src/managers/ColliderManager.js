@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-/** 当たり判定 */
+/** 当たり判定設定 */
 export class ColliderManager {
   /** @type {PIXI.DisplayObject} */
   #targetSprite;

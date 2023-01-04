@@ -2,27 +2,33 @@ import * as PIXI from "pixi.js";
 import { db } from "../database";
 import { GameObject } from "./GameObject";
 
+/** ゲームのシーン */
 export default class Scene {
-  // ゲーム用のシーンを生成
-  scene = new PIXI.Container();
-  #preloadedTextures = new Map();
+  /** 現在のシーン */
+  #scene = new PIXI.Container();
+  /** テクスチャのキャッシュ */
+  #cachedTextures = new Map();
 
+  /**
+   * @param {string[]} texturePaths プリロードするテクスチャの参照リスト
+   */
   constructor(texturePaths = []) {
     // プリロード予定のテクスチャを記録する
     texturePaths.forEach((path) => {
-      this.#preloadedTextures.set(path, null);
+      this.#cachedTextures.set(path, null);
     });
     // 毎フレームイベントを削除
     db.app.clearGameLoops();
     // ゲームシーンを画面に設定
-    db.app.setScene(this.scene);
+    db.app.setScene(this.#scene);
     // 初期処理を実行
-    this.init();
+    this.#init();
   }
-  async init() {
+  /** シーンの初期処理 */
+  async #init() {
     // テクスチャをプリロード
-    for (const path of this.#preloadedTextures.keys()) {
-      this.#preloadedTextures.set(path, await PIXI.Texture.fromLoader(path));
+    for (const path of this.#cachedTextures.keys()) {
+      this.#cachedTextures.set(path, await PIXI.Texture.fromLoader(path));
     }
     // start関数を実行
     await this.start();
@@ -35,14 +41,14 @@ export default class Scene {
    */
   instantiate(obj) {
     if (obj instanceof GameObject) {
-      this.scene.addChild(obj.view);
+      this.#scene.addChild(obj.view);
     } else {
-      this.scene.addChild(obj);
+      this.#scene.addChild(obj);
     }
   }
   /** プリロード済のテクスチャを呼び出す */
   getTexture(path) {
-    return this.#preloadedTextures.get(path);
+    return this.#cachedTextures.get(path);
   }
   /**
    * テクスチャのプリロードを書く

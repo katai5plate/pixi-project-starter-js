@@ -1,7 +1,15 @@
 import * as PIXI from "pixi.js";
 
+/** 描画エンジンの設定 */
 export class AppManager extends PIXI.Application {
   gameLoops = new Set();
+  /**
+   * @param {Object} options
+   * @param {number} options.width 幅
+   * @param {number} options.height 高さ
+   * @param {number} options.backgroundColor 背景色 0x123456
+   * @param {boolean} options.isPixelated ドットをぼかさないようにするか
+   */
   constructor({ width, height, backgroundColor, isPixelated, ...options }) {
     // PIXI.JSアプリケーションを生成 (この数字はゲーム内の画面サイズ)
     super({ width, height, ...options });
@@ -53,5 +61,12 @@ export class AppManager extends PIXI.Application {
     this.ticker.add(ticker);
     // 追加した関数は配列に保存する（後で登録を解除する時に使う）
     this.gameLoops.add(ticker);
+  }
+  /** 毎フレーム処理を削除する */
+  removeGameLoop(ticker) {
+    // 毎フレーム処理として指定した関数を追加
+    this.ticker.remove(ticker);
+    // 追加した関数は配列に保存する（後で登録を解除する時に使う）
+    this.gameLoops.remove(ticker);
   }
 }

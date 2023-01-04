@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Vector2 } from "../components/Vector2";
 
-/** 簡易物理エンジン */
+/** 簡易物理エンジン設定 */
 export class PhysicsManager {
   /** @type {PIXI.DisplayObject} */
   #targetSprite;

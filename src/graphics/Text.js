@@ -1,13 +1,13 @@
 import * as PIXI from "pixi.js";
 
-/**
- * テキストを生成してオブジェクトを返す
- * @param text テキスト
- * @param fontSize フォントサイズ
- * @param color 色(16進数)
- * @param cornaring 左上アンカーにするか（デフォルトは中央）
- */
+/** テキスト */
 export class Text extends PIXI.Text {
+  /**
+   * @param {string} text テキスト
+   * @param {number} fontSize フォントサイズ
+   * @param {number} color 色 0x123456
+   * @param {boolean} [cornaring] 左上アンカーにするか（デフォルトは中央）
+   */
   constructor(text, fontSize, color, cornaring = false) {
     super(
       text,
@@ -26,5 +26,10 @@ export class Text extends PIXI.Text {
       this.anchor.x = 0.5;
       this.anchor.y = 0.5;
     }
+  }
+  /** 位置を設定 */
+  setPosition({ x, y }) {
+    this.x = x;
+    this.y = y;
   }
 }

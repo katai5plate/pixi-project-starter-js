@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { isVoid } from "../utils";
 
+/** 2D 座標 */
 export class Vector2 extends PIXI.Point {
   constructor(x, y) {
     super(x, y);

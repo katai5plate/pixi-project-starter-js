@@ -3,6 +3,7 @@ import { ColliderManager } from "../managers/ColliderManager";
 import { PhysicsManager } from "../managers/PhysicsManager";
 import { Vector2 } from "./Vector2";
 
+/** 当たり判定と物理演算が可能な画像オブジェクト */
 export class GameObject {
   /** @type {PIXI.DisplayObject} */
   #displayObject;
@@ -63,18 +64,22 @@ export class GameObject {
     this.#displayObject.interactive = enable;
     this.#displayObject.cursor = enable ? cursor : "default";
   }
+  /** 位置を取得（読み取り専用） */
   get position() {
     this.#validDisplayObject();
     return this.#physics.position;
   }
+  /** 画像の矩形を取得（読み取り専用） */
   get rect() {
     this.#validDisplayObject();
     return this.#collider.rect;
   }
+  /** 当たり判定を取得（読み取り専用） */
   get colliderArea() {
     this.#validDisplayObject();
     return this.#collider.area;
   }
+  /** 画像を取得（読み取り専用） */
   get view() {
     this.#validDisplayObject();
     return this.#displayObject;
