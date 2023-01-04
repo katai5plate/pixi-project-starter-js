@@ -8,10 +8,66 @@ import { db } from "../database";
 import { ColliderManager } from "../managers/ColliderManager";
 import { EndScene } from "./EndScene";
 
+class Ball extends GameObject {
+  constructor() {
+    super(undefined, true, "pointer");
+  }
+  async loadddddd() {
+    // await でテクスチャのプリロードを行う
+    return new PIXI.Sprite(await PIXI.Texture.fromLoader(IMAGE_BALL));
+  }
+  async init() {
+    this.setPhysics({
+      position: () => new Vector2(200, 500),
+      velocity: () => new Vector2(5, 0),
+      // 物理エンジン実行中に毎フレーム発動する関数
+      onUpdate: () => {
+        const { screen } = db.app;
+        const { position, rect } = this;
+        // ボールの右端が画面右端を超えた場合
+        if (rect.right > screen.right) {
+          this.setPhysics({
+            // x の値を「画面右端 - ボールの幅」にする(次のフレームで反射処理させないために必要)
+            position: (prev) => ({
+              x: screen.right - rect.width,
+              y: prev.y,
+            }),
+            // 速度を反転して反射の挙動にする
+            velocity: (prev) => prev.flipX(),
+          });
+        }
+        // ボールの左端が画面左端に満たなくなった場合
+        if (rect.left < screen.left) {
+          this.setPhysics({
+            // x の値を画面左端にする(次のフレームで反射処理させないために必要)
+            position: (prev) => ({ x: screen.left, y: prev.y }),
+            // 速度を反転して反射の挙動にする
+            velocity: (prev) => prev.flipX(),
+          });
+        }
+        // 球が画面下に消えたら
+        if (position.y >= screen.bottom) {
+          new EndScene(); // 結果画面に遷移する
+        }
+      },
+    });
+    // マウスの当たり判定を円形にする
+    this.setColliderArea(ColliderManager.boxToCircle(0, 0, this.rect.width));
+    // クリック時に発動する関数
+    this.sprite.on("pointerdown", () => {
+      db.score++; // スコアを１増やす
+      this.setPhysics({
+        // ボールのＹ速度を-8にする(上に飛ぶようにしている)
+        velocity: (prev) => ({ x: prev.x, y: -8 }),
+      });
+    });
+  }
+}
+
 export class GameScene extends Scene {
   /**
    * ボール
-   * @type {GameObject}
+   * @type {Ball}
    */
   ball;
   /**
@@ -27,59 +83,7 @@ export class GameScene extends Scene {
     // スコアを初期化する
     db.score = 0;
     // ボール画像を表示するスプライトをゲームオブジェクト化
-    this.ball = new GameObject(
-      new PIXI.Sprite(
-        await PIXI.Texture.fromLoader(IMAGE_BALL) // await でテクスチャのプリロードを行う
-      ),
-      true,
-      "pointer"
-    );
-    this.ball.setPhysics({
-      position: () => new Vector2(200, 500),
-      velocity: () => new Vector2(5, 0),
-      // 物理エンジン実行中に毎フレーム発動する関数
-      onUpdate: () => {
-        const { screen } = db.app;
-        const { position, rect } = this.ball;
-        // ボールの右端が画面右端を超えた場合
-        if (rect.right > screen.right) {
-          this.ball.setPhysics({
-            // x の値を「画面右端 - ボールの幅」にする(次のフレームで反射処理させないために必要)
-            position: (prev) => ({
-              x: screen.right - rect.width,
-              y: prev.y,
-            }),
-            // 速度を反転して反射の挙動にする
-            velocity: (prev) => prev.flipX(),
-          });
-        }
-        // ボールの左端が画面左端に満たなくなった場合
-        if (rect.left < screen.left) {
-          this.ball.setPhysics({
-            // x の値を画面左端にする(次のフレームで反射処理させないために必要)
-            position: (prev) => ({ x: screen.left, y: prev.y }),
-            // 速度を反転して反射の挙動にする
-            velocity: (prev) => prev.flipX(),
-          });
-        }
-        // 球が画面下に消えたら
-        if (position.y >= screen.bottom) {
-          new EndScene(); // 結果画面に遷移する
-        }
-      },
-    });
-    // マウスの当たり判定を円形にする
-    this.ball.setColliderArea(
-      ColliderManager.boxToCircle(0, 0, this.ball.rect.width)
-    );
-    // クリック時に発動する関数
-    this.ball.sprite.on("pointerdown", () => {
-      db.score++; // スコアを１増やす
-      this.ball.setPhysics({
-        // ボールのＹ速度を-8にする(上に飛ぶようにしている)
-        velocity: (prev) => ({ x: prev.x, y: -8 }),
-      });
-    });
+    this.ball = new Ball();
     this.instantiate(this.ball); // ボールをシーンに追加
 
     // スコア表示テキスト
