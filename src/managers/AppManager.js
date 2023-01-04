@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 
 export class AppManager extends PIXI.Application {
   gameLoops = new Set();
-  constructor({ width, height, backgroundColor, ...options }) {
+  constructor({ width, height, backgroundColor, isPixelated, ...options }) {
     // PIXI.JSアプリケーションを生成 (この数字はゲーム内の画面サイズ)
     super({ width, height, ...options });
 
@@ -21,6 +21,12 @@ export class AppManager extends PIXI.Application {
 
     // canvasの背景色
     this.renderer.backgroundColor = backgroundColor ?? 0x000000;
+
+    if (isPixelated) {
+      // ドットをぼかさない
+      this.view.style.imageRendering = "pixelated";
+      PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+    }
   }
   /** 既存のシーンを全部削除する */
   clearScene() {

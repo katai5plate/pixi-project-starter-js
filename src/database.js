@@ -6,6 +6,7 @@ export const db = {
     width: 400,
     height: 600,
     backgroundColor: 0x333333,
+    isPixelated: false,
   }),
   /** スコア */
   score: 0,
