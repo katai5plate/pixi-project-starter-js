@@ -14,7 +14,7 @@ export class PhysicsManager {
   }
   /**
    * updatePhysics が呼ばれた時に実行するコールバックを設定する
-   * @param {(obj: this) => void} callback
+   * @param {() => void} callback
    */
   onUpdate(callback) {
     this.#onUpdateCallback = callback;

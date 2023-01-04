@@ -5,6 +5,9 @@ export class Vector2 extends PIXI.Point {
   constructor(x, y) {
     super(x, y);
   }
+  static from({ x, y }) {
+    return new Vector2(x, y);
+  }
   /** 代入（nullを渡すと元の値を維持する） */
   set(x, y) {
     return new Vector2(x ?? this.x, y ?? this.y);
@@ -43,6 +46,14 @@ export class Vector2 extends PIXI.Point {
       isVoid(x) ? this.x : this.x % x,
       isVoid(y) ? this.y : this.y % y
     );
+  }
+  /**
+   * 関数で計算する
+   * @param {(prev: {x: number, y: number}) => {x: number, y: number}} fn
+   */
+  calc(fn) {
+    const result = fn(this);
+    return new Vector2(result.x, result.y);
   }
   /** 参照を渡さないように複製する */
   clone() {
