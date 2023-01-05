@@ -21,3 +21,4 @@
 ## 元プロジェクト
 
 https://github.com/hothukurou/pixi_game_js
+https://hothukurou.com/blog/post-2058

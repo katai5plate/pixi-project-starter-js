@@ -52,8 +52,8 @@ export default class Scene {
       throw new Error(`プリロードが行われていない Texture です: ${path}`);
     return this.#cachedTextures.get(path);
   }
-  /** 初期処理を書く */
+  /** 初期処理を書く（上書き用） */
   async start() {}
-  /** 毎フレームの処理を書く */
+  /** 毎フレームの処理を書く（上書き用） */
   update() {}
 }
