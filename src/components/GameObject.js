@@ -11,6 +11,8 @@ export class GameObject {
   #collider;
   /** @type {PhysicsManager} */
   #physics;
+  /** @type {Vector2} */
+  #maxSize;
   constructor(displayObject) {
     this.setDisplayObject(displayObject);
   }
@@ -63,6 +65,68 @@ export class GameObject {
     this.#validDisplayObject();
     this.#displayObject.interactive = enable;
     this.#displayObject.cursor = enable ? cursor : "default";
+  }
+  /**
+   * pivot の存在しない以下のクラス以外を継承する DisplayObject を使用している場合に setAnchor で使用できる幅と高さを設定する
+   * - PIXI.Sprite
+   * - PIXI.Text
+   * - PIXI.BitmapText
+   * - PIXI.TilingSprite
+   * - PIXI.AnimatedSprite
+   * @param {number} width 幅
+   * @param {number} height 高さ
+   */
+  setMaxSize(width, height) {
+    this.#maxSize = new Vector2(width, height);
+  }
+  /**
+   * 原点を設定する。anchor が無い場合は代わりに pivot を設定する
+   * - 以下のクラスを継承しているもの以外は事前に setMaxSize を行うこと:
+   *   - PIXI.Sprite
+   *   - PIXI.Text
+   *   - PIXI.BitmapText
+   *   - PIXI.TilingSprite
+   *   - PIXI.AnimatedSprite
+   * @param {"CORNER" | "CENTER" | {x: number, y: number}} modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
+   */
+  setOrigin(modeOrVec2) {
+    // anchor が存在する場合
+    if (this.#displayObject.anchor) {
+      // 統一するために pivot は 0 にする
+      this.#displayObject.pivot.x = 0;
+      this.#displayObject.pivot.y = 0;
+      // anchor を設定
+      if (typeof modeOrVec2 === "object") {
+        this.#displayObject.anchor.set(modeOrVec2.x, modeOrVec2.y);
+      } else if (["CORNER", "CENTER"].includes(modeOrVec2)) {
+        const anchor = modeOrVec2 === "CORNER" ? 0 : 0.5;
+        this.#displayObject.anchor.set(anchor);
+      } else {
+        throw new Error(`無効な設定値です: ${modeOrVec2}`);
+      }
+    }
+    // pivot しかない場合
+    else {
+      let x, y;
+      const [width, height] = [this.#maxSize?.x, this.#maxSize?.y];
+      if (!Number.isFinite(width) || !Number.isFinite(height))
+        throw new Error(
+          `アンカーが存在しないオブジェクトを使用しているため setMaxSize の指定が必要です: ${JSON.stringify(
+            { width, height }
+          )}`
+        );
+      // pivot を設定
+      if (typeof modeOrVec2 === "object") {
+        [x, y] = [width * modeOrVec2.x, height * modeOrVec2.y];
+      } else if (["CORNER", "CENTER"].includes(modeOrVec2)) {
+        const anchor = modeOrVec2 === "CORNER" ? 0 : 0.5;
+        [x, y] = [width * anchor, height * anchor];
+      } else {
+        throw new Error(`無効な設定値です: ${modeOrVec2}`);
+      }
+      this.#displayObject.pivot.x = x;
+      this.#displayObject.pivot.y = y;
+    }
   }
   /** 位置を取得（読み取り専用） */
   get position() {
