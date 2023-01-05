@@ -1,8 +1,8 @@
-import { GameScene } from "./scenes/GameScene";
+import { TitleScene } from "./scenes/TitleScene";
 
 const main = async () => {
-  // ゲームシーンを開始する
-  new GameScene();
+  // タイトルシーンを開始する
+  new TitleScene();
 };
 
 main();
