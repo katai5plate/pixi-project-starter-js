@@ -1,8 +1,9 @@
 import IMAGE_BALL from "../../../img/ball.png";
 import Scene from "../../components/Scene";
 import { Text } from "../../graphics/Text";
-import { db } from "../../database";
+import { db, engine } from "../../database";
 import { Ball } from "./Ball";
+import { Vector2 } from "../../components/Vector2";
 
 /** ゲーム中のシーン */
 export class GameScene extends Scene {
@@ -28,7 +29,17 @@ export class GameScene extends Scene {
     db.score = 0;
 
     // ボール
-    this.ball = new Ball(this);
+    this.ball = new Ball(
+      this,
+      engine.screen.grid(
+        // 画面幅の 4 分の 1 の X 座標に位置設定
+        1 / 2,
+        // 画面高さの 6 分の 5 の Y 座標に位置設定
+        5 / 6
+      ),
+      // 速度
+      new Vector2(5, 0)
+    );
     this.instantiate(this.ball); // ボールをシーンに追加
 
     // スコア表示テキスト

@@ -1,14 +1,14 @@
 import Scene from "../../components/Scene";
-import { Vector2 } from "../../components/Vector2";
 import { db, engine } from "../../database";
 import { Text } from "../../graphics/Text";
+import { BigLabel } from "../../prefabs/BigLabel";
 import { RetryButton, TweetButton } from "./buttons";
 
 /**
  * ゲームの結果画面シーンを生成する関数
  */
 export class EndScene extends Scene {
-  /** @type {Text} */
+  /** @type {BigLabel} */
   message;
   /** @type {RetryButton} */
   retryButton;
@@ -19,9 +19,10 @@ export class EndScene extends Scene {
     super();
   }
   async start() {
-    // テキストオブジェクトの定義
-    this.message = new Text(`SCORE:${db.score}で力尽きた`, 32, 0xfcbb08); // 結果画面のテキスト
-    this.message.setPosition(
+    // 結果発表テキスト
+    this.message = new BigLabel(
+      `SCORE:${db.score}で力尽きた`,
+      0xfcbb08,
       engine.screen.grid(
         // 画面幅の半分の X 座標（真ん中）
         1 / 2,
@@ -29,18 +30,28 @@ export class EndScene extends Scene {
         1 / 3
       )
     );
-    this.instantiate(this.message); // 結果画面シーンにテキスト追加
+    this.instantiate(this.message);
 
-    /**
-     * 自作のボタン生成関数を使って、もう一度ボタンを生成
-     */
-    this.retryButton = new RetryButton();
+    // もう一度ボタン
+    this.retryButton = new RetryButton(
+      engine.screen.grid(
+        // 画面幅の 4 分の 1 の X 座標
+        1 / 4,
+        // 画面高さの 6 分の 5 の Y 座標
+        5 / 6
+      )
+    );
     this.instantiate(this.retryButton); // ボタンを結果画面シーンに追加
 
-    /**
-     * 自作のボタン生成関数を使って、ツイートボタンを生成
-     */
-    this.tweetButton = new TweetButton();
+    // ツイートボタン
+    this.tweetButton = new TweetButton(
+      engine.screen.grid(
+        // 画面幅の 4 分の 3 の X 座標
+        3 / 4,
+        // 画面高さの 6 分の 5 の Y 座標
+        5 / 6
+      )
+    );
     this.instantiate(this.tweetButton); // ボタンを結果画面シーンに追加
   }
 }

@@ -2,13 +2,14 @@ import { Button } from "../../components/Button";
 import Scene from "../../components/Scene";
 import { engine } from "../../database";
 import { Text } from "../../graphics/Text";
+import { BigLabel } from "../../prefabs/BigLabel";
 import { GameScene } from "../GameScene";
 
 /**
  * ゲームの結果画面シーンを生成する関数
  */
 export class TitleScene extends Scene {
-  /** @type {Text} */
+  /** @type {BigLabel} */
   message;
   /** @type {Button} */
   startButton;
@@ -17,9 +18,10 @@ export class TitleScene extends Scene {
     super();
   }
   async start() {
-    // テキストオブジェクトの定義
-    this.message = new Text("ゲームタイトル", 32, 0xffffff); // 結果画面のテキスト
-    this.message.setPosition(
+    // タイトルテキスト
+    this.message = new BigLabel(
+      "ゲームタイトル",
+      0xffffff,
       engine.screen.grid(
         // 画面幅の半分の X 座標（真ん中）
         1 / 2,
@@ -29,9 +31,7 @@ export class TitleScene extends Scene {
     );
     this.instantiate(this.message); // 結果画面シーンにテキスト追加
 
-    /**
-     * 自作のボタン生成関数を使って、ボタンを生成
-     */
+    // スタートボタン
     this.startButton = new Button("スタート", 200, 60, 0x00aa00, () => {
       new GameScene();
     });
