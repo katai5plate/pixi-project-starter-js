@@ -18,7 +18,7 @@ export class Ball extends GameObject {
       velocity: new Vector2(5, 0),
       // 物理エンジン実行中に毎フレーム発動する関数
       onUpdate: () => {
-        const { screen } = db.app;
+        const { screen } = db;
         const { position, rect } = this;
         // ボールの右端が画面右端を超えた場合
         if (rect.right > screen.right) {
