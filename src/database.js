@@ -6,6 +6,7 @@ const app = new AppManager({
   height: 600,
   backgroundColor: 0x333333,
   isPixelated: false,
+  isDebug: true,
 });
 const screen = new ScreenManager(app);
 

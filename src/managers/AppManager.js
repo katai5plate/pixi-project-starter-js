@@ -1,16 +1,31 @@
 import * as PIXI from "pixi.js";
+import Scene from "../components/Scene";
+import { db, engine } from "../database";
 
 /** 描画エンジンの設定 */
 export class AppManager extends PIXI.Application {
   gameLoops = new Set();
+  /** @type {Scene?} */
+  #scene = null;
+  /** @type {PIXI.Graphics?} */
+  #debugLayer = null;
+  isDebug;
   /**
    * @param {Object} options
    * @param {number} options.width 幅
    * @param {number} options.height 高さ
    * @param {number} options.backgroundColor 背景色 0x123456
    * @param {boolean} options.isPixelated ドットをぼかさないようにするか
+   * @param {boolean} options.isDebug デバッグ機能を使用するか
    */
-  constructor({ width, height, backgroundColor, isPixelated, ...options }) {
+  constructor({
+    width,
+    height,
+    backgroundColor,
+    isPixelated,
+    isDebug,
+    ...options
+  }) {
     // PIXI.JSアプリケーションを生成 (この数字はゲーム内の画面サイズ)
     super({ width, height, ...options });
 
@@ -35,17 +50,55 @@ export class AppManager extends PIXI.Application {
       this.view.style.imageRendering = "pixelated";
       PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
     }
+
+    this.isDebug = isDebug;
+
+    // デバッグ用に様々なデータをコンソールでアクセス可能にする
+    if (this.isDebug) {
+      window.PIXI = PIXI;
+      // 参照時に最新の値を得るために関数にする
+      window.db = () => db;
+      window.engine = () => engine;
+    }
+  }
+  /** 現在のシーン（読み取り専用） */
+  get currentScene() {
+    return this.#scene;
+  }
+  /**
+   * デバッグ用レイヤー
+   * ```js
+   * // 200x200 の白い矩形を (0, 0) に描画
+   * engine.app.debugLayer.beginFill(0xffffff);
+   * engine.app.debugLayer.drawRect(0, 0, 200, 200);
+   * ```
+   */
+  get debugLayer() {
+    if (!this.isDebug) console.warn("デバッグ機能が無効です");
+    return this.#debugLayer;
   }
   /** 既存のシーンを全部削除する */
   clearScene() {
     for (const scene of this.stage.children) {
       this.stage.removeChild(scene);
     }
+    // デバッグ用レイヤーを消す
+    if (this.isDebug) {
+      this.stage.removeChild(this.#debugLayer);
+      this.#debugLayer = null;
+    }
   }
   /** シーンを設定する */
   setScene(scene) {
     this.clearScene();
-    this.stage.addChild(scene);
+    this.#scene = scene;
+    this.stage.addChild(this.#scene);
+    // デバッグ用に図形を書き込めるレイヤーを挟む
+    if (this.isDebug) {
+      this.#debugLayer = new PIXI.Graphics();
+      this.#debugLayer.beginFill(0xffffff, 0.5);
+      this.stage.addChild(this.#debugLayer);
+    }
   }
   /** gameLoops に追加した関数を全部 ticker から解除する */
   clearGameLoops() {
