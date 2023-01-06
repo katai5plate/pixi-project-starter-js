@@ -14,9 +14,9 @@ export class RetryButton extends Button {
     // ボタンの座標指定
     this.setPosition(
       engine.screen.grid(
-        // 画面幅の 4 分の 1 の座標
+        // 画面幅の 4 分の 1 の X 座標
         1 / 4,
-        // 画面高さの 6 分の 5 の座標
+        // 画面高さの 6 分の 5 の Y 座標
         5 / 6
       )
     );
@@ -43,9 +43,9 @@ export class TweetButton extends Button {
     // ボタンの座標指定
     this.setPosition(
       engine.screen.grid(
-        // 画面幅の 4 分の 3 の座標
+        // 画面幅の 4 分の 3 の X 座標
         3 / 4,
-        // 画面高さの 6 分の 5 の座標
+        // 画面高さの 6 分の 5 の Y 座標
         5 / 6
       )
     );

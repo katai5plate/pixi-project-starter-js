@@ -23,9 +23,9 @@ export class EndScene extends Scene {
     this.message = new Text(`SCORE:${db.score}で力尽きた`, 32, 0xfcbb08); // 結果画面のテキスト
     this.message.setPosition(
       engine.screen.grid(
-        // 画面幅の半分の座標（真ん中）
+        // 画面幅の半分の X 座標（真ん中）
         1 / 2,
-        // 画面高さの 3 分の 1 の座標（中央よりやや上）
+        // 画面高さの 3 分の 1 の Y 座標（中央よりやや上）
         1 / 3
       )
     );
