@@ -93,3 +93,26 @@ export class Vector2 extends PIXI.Point {
     return this.add(value, null);
   }
 }
+
+/** 幅と高さ */
+export class Size extends Vector2 {
+  /**
+   * @param {number} width
+   * @param {number} height
+   */
+  constructor(width, height) {
+    super(width, height);
+  }
+  get width() {
+    return this.x;
+  }
+  set width(value) {
+    this.x = value;
+  }
+  get height() {
+    return this.y;
+  }
+  set height(value) {
+    this.y = value;
+  }
+}
