@@ -3,7 +3,7 @@ import IMAGE_BALL from "../../../img/ball.png";
 import { GameObject } from "../../components/GameObject";
 import Scene from "../../components/Scene";
 import { Vector2 } from "../../components/Vector2";
-import { db } from "../../database";
+import { db, engine } from "../../database";
 import { ColliderManager } from "../../managers/ColliderManager";
 import { EndScene } from "../EndScene";
 
@@ -18,7 +18,7 @@ export class Ball extends GameObject {
       velocity: new Vector2(5, 0),
       // 物理エンジン実行中に毎フレーム発動する関数
       onUpdate: () => {
-        const { screen } = db;
+        const { screen } = engine;
         const { position, rect } = this;
         // ボールの右端が画面右端を超えた場合
         if (rect.right > screen.right) {
