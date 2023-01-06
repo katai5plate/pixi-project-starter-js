@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { db } from "../database";
+import { db, engine } from "../database";
 import { GameObject } from "./GameObject";
 
 /** ゲームのシーン */
@@ -18,9 +18,9 @@ export default class Scene {
       this.#cachedTextures.set(path, null);
     });
     // 毎フレームイベントを削除
-    db.app.clearGameLoops();
+    engine.app.clearGameLoops();
     // ゲームシーンを画面に設定
-    db.app.setScene(this.#scene);
+    engine.app.setScene(this.#scene);
     // 初期処理を実行
     this.#init();
   }
@@ -33,7 +33,7 @@ export default class Scene {
     // start関数を実行
     await this.start();
     // update関数を毎フレーム実行にする
-    db.app.addGameLoop(() => this.update());
+    engine.app.addGameLoop(() => this.update());
   }
   /**
    * シーンにオブジェクトを描画

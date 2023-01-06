@@ -9,11 +9,16 @@ const app = new AppManager({
 });
 const screen = new ScreenManager(app);
 
-export const db = {
+/** ゲームエンジン関連の状態管理 */
+export const engine = {
   /** 描画エンジンの設定 */
   app,
   /** 画面の設定 */
   screen,
+};
+
+/** ゲーム内容の状態管理 */
+export const db = {
   /** スコア */
   score: 0,
 };

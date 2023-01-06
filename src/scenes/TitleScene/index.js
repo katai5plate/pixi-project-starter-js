@@ -1,7 +1,7 @@
 import { Button } from "../../components/Button";
 import Scene from "../../components/Scene";
 import { Vector2 } from "../../components/Vector2";
-import { db } from "../../database";
+import { db, engine } from "../../database";
 import { Text } from "../../graphics/Text";
 import { GameScene } from "../GameScene";
 
@@ -23,7 +23,7 @@ export class TitleScene extends Scene {
     this.message.setPosition(
       new Vector2(
         // xのアンカーが0.5で中央指定なので、テキストのx値を画面中央にすると真ん中にテキストが表示される
-        db.screen.width / 2,
+        engine.screen.width / 2,
         // yのアンカーはデフォルトの0なので、画面上から200の位置にテキスト表示
         200
       )
@@ -37,7 +37,7 @@ export class TitleScene extends Scene {
       new GameScene();
     });
     this.startButton.setPhysics({
-      position: new Vector2(db.screen.width / 2, 500),
+      position: new Vector2(engine.screen.width / 2, 500),
     });
     this.startButton.setOrigin("CENTER");
     this.instantiate(this.startButton); // ボタンをシーンに追加
