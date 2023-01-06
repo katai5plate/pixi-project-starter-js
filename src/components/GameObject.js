@@ -34,10 +34,10 @@ export class GameObject {
   }
   /**
    * 物理設定を変更する
-   * @template {{x: number, y: number}} Vec2
+   * @template {Vector2 | {x: number, y: number}} Vector2Like
    * @param {{
-   *   position: Vec2 | (prev: Vector2) => Vec2,
-   *   velocity: Vec2 | (prev: Vector2) => Vec2,
+   *   position: Vector2Like | (prev: Vector2) => Vector2Like,
+   *   velocity: Vector2Like | (prev: Vector2) => Vector2Like,
    *   onUpdate: () => void
    * }} params
    */

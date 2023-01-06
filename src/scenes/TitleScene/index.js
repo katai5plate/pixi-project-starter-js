@@ -21,11 +21,11 @@ export class TitleScene extends Scene {
     // テキストオブジェクトの定義
     this.message = new Text("ゲームタイトル", 32, 0xffffff); // 結果画面のテキスト
     this.message.setPosition(
-      new Vector2(
-        // xのアンカーが0.5で中央指定なので、テキストのx値を画面中央にすると真ん中にテキストが表示される
-        engine.screen.width / 2,
-        // yのアンカーはデフォルトの0なので、画面上から200の位置にテキスト表示
-        200
+      engine.screen.grid(
+        // 画面幅の半分の座標（真ん中）
+        1 / 2,
+        // 画面高さの 3 分の 1 の座標（中央よりやや上）
+        1 / 3
       )
     );
     this.instantiate(this.message); // 結果画面シーンにテキスト追加
@@ -36,10 +36,17 @@ export class TitleScene extends Scene {
     this.startButton = new Button("スタート", 200, 60, 0x00aa00, () => {
       new GameScene();
     });
-    this.startButton.setPhysics({
-      position: new Vector2(engine.screen.width / 2, 500),
-    });
+    // 原点を中心にする
     this.startButton.setOrigin("CENTER");
+    // 位置を設定
+    this.startButton.setPhysics({
+      position: engine.screen.grid(
+        // 画面幅の半分の座標（真ん中）
+        1 / 2,
+        // 画面高さの 6 分の 5 の座標（下のほう）
+        5 / 6
+      ),
+    });
     this.instantiate(this.startButton); // ボタンをシーンに追加
   }
 }

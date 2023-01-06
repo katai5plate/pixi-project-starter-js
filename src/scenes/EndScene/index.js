@@ -1,6 +1,6 @@
 import Scene from "../../components/Scene";
 import { Vector2 } from "../../components/Vector2";
-import { db } from "../../database";
+import { db, engine } from "../../database";
 import { Text } from "../../graphics/Text";
 import { RetryButton, TweetButton } from "./buttons";
 
@@ -22,11 +22,11 @@ export class EndScene extends Scene {
     // テキストオブジェクトの定義
     this.message = new Text(`SCORE:${db.score}で力尽きた`, 32, 0xfcbb08); // 結果画面のテキスト
     this.message.setPosition(
-      new Vector2(
-        // xのアンカーが0.5で中央指定なので、テキストのx値を画面中央にすると真ん中にテキストが表示される
-        200,
-        // yのアンカーはデフォルトの0なので、画面上から200の位置にテキスト表示
-        200
+      engine.screen.grid(
+        // 画面幅の半分の座標（真ん中）
+        1 / 2,
+        // 画面高さの 3 分の 1 の座標（中央よりやや上）
+        1 / 3
       )
     );
     this.instantiate(this.message); // 結果画面シーンにテキスト追加

@@ -3,6 +3,10 @@ import { isVoid } from "../utils";
 
 /** 2D 座標 */
 export class Vector2 extends PIXI.Point {
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
   constructor(x, y) {
     super(x, y);
   }

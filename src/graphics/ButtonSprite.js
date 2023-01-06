@@ -28,9 +28,9 @@ export class ButtonSprite extends PIXI.Container {
     const buttonText = new Text(text, fontSize, 0xffffff); // テキストオブジェクトを定義
     buttonText.setPosition(
       new Vector2(
-        // ボタン中央にテキストを設置するため、width/2の値をx値に指定
+        // ボタン中央にテキストを設置するため、ボタン幅の半分を x 値に指定
         width / 2,
-        // ボタン中央テキストを設置するため、height/2の値をy値に指定
+        // ボタン中央にテキストを設置するため、ボタン高さの半分を y 値に指定
         height / 2
       )
     );
