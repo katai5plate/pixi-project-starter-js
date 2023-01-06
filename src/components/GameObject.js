@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { ColliderManager } from "../managers/ColliderManager";
 import { PhysicsManager } from "../managers/PhysicsManager";
+import { setOriginProcess } from "../utils";
 import { Vector2 } from "./Vector2";
 
 /**
@@ -107,43 +108,7 @@ export class GameObject {
    * @param {"CORNER" | "CENTER" | {x: number, y: number}} modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
    */
   setOrigin(modeOrVec2) {
-    // anchor が存在する場合
-    if (this.#displayObject.anchor) {
-      // 統一するために pivot は 0 にする
-      this.#displayObject.pivot.x = 0;
-      this.#displayObject.pivot.y = 0;
-      // anchor を設定
-      if (typeof modeOrVec2 === "object") {
-        this.#displayObject.anchor.set(modeOrVec2.x, modeOrVec2.y);
-      } else if (["CORNER", "CENTER"].includes(modeOrVec2)) {
-        const anchor = modeOrVec2 === "CORNER" ? 0 : 0.5;
-        this.#displayObject.anchor.set(anchor);
-      } else {
-        throw new Error(`無効な設定値です: ${modeOrVec2}`);
-      }
-    }
-    // pivot しかない場合
-    else {
-      let x, y;
-      const [width, height] = [this.#maxSize?.x, this.#maxSize?.y];
-      if (!Number.isFinite(width) || !Number.isFinite(height))
-        throw new Error(
-          `アンカーが存在しないオブジェクトを使用しているため setMaxSize の指定が必要です: ${JSON.stringify(
-            { width, height }
-          )}`
-        );
-      // pivot を設定
-      if (typeof modeOrVec2 === "object") {
-        [x, y] = [width * modeOrVec2.x, height * modeOrVec2.y];
-      } else if (["CORNER", "CENTER"].includes(modeOrVec2)) {
-        const anchor = modeOrVec2 === "CORNER" ? 0 : 0.5;
-        [x, y] = [width * anchor, height * anchor];
-      } else {
-        throw new Error(`無効な設定値です: ${modeOrVec2}`);
-      }
-      this.#displayObject.pivot.x = x;
-      this.#displayObject.pivot.y = y;
-    }
+    setOriginProcess(modeOrVec2, this.#displayObject, this.#maxSize);
   }
   /** 位置を取得（読み取り専用） */
   get position() {

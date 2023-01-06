@@ -1,4 +1,6 @@
 import * as PIXI from "pixi.js";
+import { Size } from "../../components/Vector2";
+import { setOriginProcess } from "../../utils";
 
 /** テキスト */
 export class Text extends PIXI.Text {
@@ -30,17 +32,6 @@ export class Text extends PIXI.Text {
    * @param {"CORNER" | "CENTER" | {x: number, y: number}} modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
    */
   setOrigin(modeOrVec2) {
-    // 統一するために pivot は 0 にする
-    this.pivot.x = 0;
-    this.pivot.y = 0;
-    // anchor を設定
-    if (typeof modeOrVec2 === "object") {
-      this.anchor.set(modeOrVec2.x, modeOrVec2.y);
-    } else if (["CORNER", "CENTER"].includes(modeOrVec2)) {
-      const anchor = modeOrVec2 === "CORNER" ? 0 : 0.5;
-      this.anchor.set(anchor);
-    } else {
-      throw new Error(`無効な設定値です: ${modeOrVec2}`);
-    }
+    setOriginProcess(modeOrVec2, this, new Size(this.width, this.height));
   }
 }
