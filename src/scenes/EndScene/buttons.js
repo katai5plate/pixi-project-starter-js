@@ -1,5 +1,6 @@
 import { Button } from "../../components/Button";
 import { db, engine } from "../../database";
+import { makeTwitterShareUrl } from "../../utils";
 import { GameScene } from "../GameScene";
 
 export class RetryButton extends Button {
@@ -25,12 +26,17 @@ export class RetryButton extends Button {
 export class TweetButton extends Button {
   constructor() {
     super("ツイート", 100, 60, 0x0000ff, () => {
-      //ツイートＡＰＩに送信
-      //結果ツイート時にURLを貼るため、このゲームのURLをここに記入してURLがツイート画面に反映されるようにエンコードする
-      const url = encodeURI("https://hothukurou.com"); // ツイートに載せるURLを指定(文字はエンコードする必要がある)
+      // 新しいウィンドウを開く
       window.open(
-        `http://twitter.com/intent/tweet?text=SCORE:${db.score}点で力尽きた&hashtags=sample&url=${url}`
-      ); //ハッシュタグをsampleにする
+        // 結果ツイートのために最適化した URL を指定
+        makeTwitterShareUrl(
+          `SCORE:${db.score}点で力尽きた`,
+          //ハッシュタグを sample にする
+          ["sample"],
+          // ツイートに載せるURL
+          "https://hothukurou.com"
+        )
+      );
     });
     // 原点を中心にする
     this.setOrigin("CENTER");
