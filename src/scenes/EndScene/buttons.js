@@ -10,7 +10,7 @@ export class RetryButton extends Button {
       new GameScene(); // ゲームシーンに遷移する
     });
     // ボタンの座標指定
-    this.setPhysics({ position: () => new Vector2(50, 500) });
+    this.setPhysics({ position: new Vector2(50, 500) });
   }
 }
 
@@ -25,6 +25,6 @@ export class TweetButton extends Button {
       ); //ハッシュタグをsampleにする
     });
     // ボタンの座標指定
-    this.setPhysics({ position: () => new Vector2(250, 500) });
+    this.setPhysics({ position: new Vector2(250, 500) });
   }
 }

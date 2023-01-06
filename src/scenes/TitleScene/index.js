@@ -37,7 +37,7 @@ export class TitleScene extends Scene {
       new GameScene();
     });
     this.startButton.setPhysics({
-      position: () => new Vector2(db.app.screen.width / 2, 500),
+      position: new Vector2(db.app.screen.width / 2, 500),
     });
     this.startButton.setOrigin("CENTER");
     this.instantiate(this.startButton); // ボタンをシーンに追加

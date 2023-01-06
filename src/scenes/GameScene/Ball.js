@@ -14,8 +14,8 @@ export class Ball extends GameObject {
     super(new PIXI.Sprite(scene.getTexture(IMAGE_BALL)));
     // ボールの物理挙動を設定する
     this.setPhysics({
-      position: () => new Vector2(200, 500),
-      velocity: () => new Vector2(5, 0),
+      position: new Vector2(200, 500),
+      velocity: new Vector2(5, 0),
       // 物理エンジン実行中に毎フレーム発動する関数
       onUpdate: () => {
         const { screen } = db.app;

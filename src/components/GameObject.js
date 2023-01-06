@@ -34,18 +34,25 @@ export class GameObject {
   }
   /**
    * 物理設定を変更する
+   * @template {{x: number, y: number}} Vec2
    * @param {{
-   *   position: (prev: Vector2) => {x: number, y: number},
-   *   velocity: (prev: Vector2) => {x: number, y: number},
+   *   position: Vec2 | (prev: Vector2) => Vec2,
+   *   velocity: Vec2 | (prev: Vector2) => Vec2,
    *   onUpdate: () => void
    * }} params
    */
   setPhysics({ position, velocity, onUpdate }) {
     this.#validDisplayObject();
     if (position)
-      this.#physics.position = Vector2.from(position(this.#physics.position));
+      this.#physics.position =
+        typeof position === "function"
+          ? Vector2.from(position(this.#physics.position))
+          : position;
     if (velocity)
-      this.#physics.velocity = Vector2.from(velocity(this.#physics.velocity));
+      this.#physics.velocity =
+        typeof velocity === "function"
+          ? Vector2.from(velocity(this.#physics.velocity))
+          : velocity;
     if (onUpdate) this.#physics.onUpdate(onUpdate);
   }
   /**
@@ -148,17 +155,26 @@ export class GameObject {
     this.#validDisplayObject();
     return this.#displayObject;
   }
-  /** @type {PIXI.DisplayObject["on"]} */
+  /**
+   * DisplayObject にイベントを設定する
+   *  @type {PIXI.DisplayObject["on"]}
+   */
   on(...args) {
     this.#validDisplayObject();
     return this.#displayObject.on(...args);
   }
-  /** @type {PIXI.DisplayObject["off"]} */
+  /**
+   * DisplayObject のイベントを解除する
+   * @type {PIXI.DisplayObject["off"]}
+   */
   off(...args) {
     this.#validDisplayObject();
     return this.#displayObject.off(...args);
   }
-  /** @type {PIXI.DisplayObject["once"]} */
+  /**
+   * DisplayObject にワンタイムイベントを設定する
+   * @type {PIXI.DisplayObject["once"]}
+   */
   once(...args) {
     this.#validDisplayObject();
     return this.#displayObject.once(...args);
