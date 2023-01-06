@@ -39,14 +39,14 @@ export class TitleScene extends Scene {
     // 原点を中心にする
     this.startButton.setOrigin("CENTER");
     // 位置を設定
-    this.startButton.setPhysics({
-      position: engine.screen.grid(
+    this.startButton.setPosition(
+      engine.screen.grid(
         // 画面幅の半分の座標（真ん中）
         1 / 2,
         // 画面高さの 6 分の 5 の座標（下のほう）
         5 / 6
-      ),
-    });
+      )
+    );
     this.instantiate(this.startButton); // ボタンをシーンに追加
   }
 }

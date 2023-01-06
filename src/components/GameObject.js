@@ -3,6 +3,10 @@ import { ColliderManager } from "../managers/ColliderManager";
 import { PhysicsManager } from "../managers/PhysicsManager";
 import { Vector2 } from "./Vector2";
 
+/**
+ * @typedef {import("./Vector2").Vector2Like} Vector2Like
+ */
+
 /** 当たり判定と物理演算が可能な画像オブジェクト */
 export class GameObject {
   /** @type {PIXI.DisplayObject} */
@@ -34,7 +38,6 @@ export class GameObject {
   }
   /**
    * 物理設定を変更する
-   * @template {Vector2 | {x: number, y: number}} Vector2Like
    * @param {{
    *   position: Vector2Like | (prev: Vector2) => Vector2Like,
    *   velocity: Vector2Like | (prev: Vector2) => Vector2Like,
@@ -54,6 +57,13 @@ export class GameObject {
           ? Vector2.from(velocity(this.#physics.velocity))
           : velocity;
     if (onUpdate) this.#physics.onUpdate(onUpdate);
+  }
+  /**
+   * 位置を設定する。（setPhysics の position 指定のショートハンド）
+   * @param {Vector2Like | (prev: Vector2) => Vector2Like} position
+   */
+  setPosition(position) {
+    this.setPhysics({ position });
   }
   /**
    * 当たり判定の範囲を指定する

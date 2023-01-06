@@ -1,6 +1,10 @@
 import * as PIXI from "pixi.js";
 import { isVoid } from "../utils";
 
+/**
+ * @typedef {Vector2 | {x: number, y: number}} Vector2Like
+ */
+
 /** 2D 座標 */
 export class Vector2 extends PIXI.Point {
   /**

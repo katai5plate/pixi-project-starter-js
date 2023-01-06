@@ -11,14 +11,14 @@ export class RetryButton extends Button {
     // 原点を中心にする
     this.setOrigin("CENTER");
     // ボタンの座標指定
-    this.setPhysics({
-      position: engine.screen.grid(
+    this.setPosition(
+      engine.screen.grid(
         // 画面幅の 4 分の 1 の座標
         1 / 4,
         // 画面高さの 6 分の 5 の座標
         5 / 6
-      ),
-    });
+      )
+    );
   }
 }
 
@@ -35,13 +35,13 @@ export class TweetButton extends Button {
     // 原点を中心にする
     this.setOrigin("CENTER");
     // ボタンの座標指定
-    this.setPhysics({
-      position: engine.screen.grid(
+    this.setPosition(
+      engine.screen.grid(
         // 画面幅の 4 分の 3 の座標
         3 / 4,
         // 画面高さの 6 分の 5 の座標
         5 / 6
-      ),
-    });
+      )
+    );
   }
 }
