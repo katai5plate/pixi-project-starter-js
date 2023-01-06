@@ -10,11 +10,12 @@ import { EndScene } from "../EndScene";
 /** ボール画像を表示するスプライトで作ったゲームオブジェクト */
 export class Ball extends GameObject {
   /**
-   * @param {Scene} scene シーン
-   * @param {Vector2} position 初期座標
-   * @param {Vector2} velocity 初期速度
+   * @param {Object} _
+   * @param {Scene} _.scene シーン
+   * @param {Vector2} _.position 初期座標
+   * @param {Vector2} _.velocity 初期速度
    */
-  constructor(scene, position, velocity) {
+  constructor({ scene, position, velocity }) {
     super(new PIXI.Sprite(scene.getTexture(IMAGE_BALL)));
     // onUpdate で rect を使用してバウンド処理を実装するため原点を左上にする
     this.setOrigin("CORNER");

@@ -5,7 +5,11 @@ import { GameScene } from "../GameScene";
 
 /** もう一度ボタン */
 export class RetryButton extends Button {
-  constructor(position) {
+  /**
+   * @param {Object} _
+   * @param {Vector2} _.position 座標
+   */
+  constructor({ position }) {
     super("もう一度", 100, 60, 0xff0000, () => {
       // クリックした時の処理
       new GameScene(); // ゲームシーンに遷移する
@@ -19,7 +23,11 @@ export class RetryButton extends Button {
 
 /** ツイートボタン */
 export class TweetButton extends Button {
-  constructor(position) {
+  /**
+   * @param {Object} _
+   * @param {Vector2} _.position 座標
+   */
+  constructor({ position }) {
     super("ツイート", 100, 60, 0x0000ff, () => {
       // 新しいウィンドウを開く
       window.open(

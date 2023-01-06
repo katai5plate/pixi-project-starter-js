@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Vector2 } from "../components/Vector2";
+import { Vector2 } from "../../components/Vector2";
 import { Text } from "./Text";
 
 /** 簡易ボタン */
@@ -34,6 +34,7 @@ export class ButtonSprite extends PIXI.Container {
         height / 2
       )
     );
+    buttonText.setOrigin("CENTER");
     this.addChild(buttonText); // ボタンテキストをボタンコンテナに追加
   }
 }

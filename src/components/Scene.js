@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { db, engine } from "../database";
+import { engine } from "../database";
 import { GameObject } from "./GameObject";
 
 /** ゲームのシーン */

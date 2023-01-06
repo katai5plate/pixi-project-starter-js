@@ -1,4 +1,4 @@
-import { ButtonSprite } from "../graphics/ButtonSprite";
+import { ButtonSprite } from "../ui/atoms/ButtonSprite";
 import { GameObject } from "./GameObject";
 
 /** ボタン UI */

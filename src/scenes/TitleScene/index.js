@@ -1,8 +1,7 @@
 import { Button } from "../../components/Button";
 import Scene from "../../components/Scene";
 import { engine } from "../../database";
-import { Text } from "../../graphics/Text";
-import { BigLabel } from "../../prefabs/BigLabel";
+import { BigLabel } from "../../ui/molecules/BigLabel";
 import { GameScene } from "../GameScene";
 
 /**
@@ -19,16 +18,16 @@ export class TitleScene extends Scene {
   }
   async start() {
     // タイトルテキスト
-    this.message = new BigLabel(
-      "ゲームタイトル",
-      0xffffff,
-      engine.screen.grid(
+    this.message = new BigLabel({
+      text: "ゲームタイトル",
+      color: 0xffffff,
+      position: engine.screen.grid(
         // 画面幅の半分の X 座標（真ん中）
         1 / 2,
         // 画面高さの 3 分の 1 の Y 座標（中央よりやや上）
         1 / 3
-      )
-    );
+      ),
+    });
     this.instantiate(this.message); // 結果画面シーンにテキスト追加
 
     // スタートボタン
