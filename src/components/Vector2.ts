@@ -6,10 +6,10 @@ export type ModeOrVector2Like = "CORNER" | "CENTER" | Vector2Like;
 
 /** 2D 座標 */
 export class Vector2 extends PIXI.Point {
-  constructor(x: number | null, y: number | null) {
+  constructor(x?: number, y?: number) {
     super(x, y);
   }
-  static from({ x, y }) {
+  static from({ x, y }: Vector2Like) {
     return new Vector2(x, y);
   }
   /** 関数で計算する */

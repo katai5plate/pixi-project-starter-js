@@ -1,20 +1,25 @@
 import * as PIXI from "pixi.js";
-import { GameObjectSprite } from "../components/GameObject";
+import { GameObject, GameObjectSprite } from "../components/GameObject";
 import { Size } from "../components/Vector2";
 
 /** 当たり判定設定 */
 export class ColliderManager {
-  #targetSprite: GameObjectSprite;
-  #maxSize: Size;
-  constructor(targetSprite: GameObjectSprite, maxSize: Size) {
-    this.#targetSprite = targetSprite;
-    this.#maxSize = maxSize;
+  #targetSprite?: GameObjectSprite;
+  #maxSize?: Size;
+  constructor(gameObject: GameObject) {
+    this.#targetSprite = gameObject.view;
+    this.#maxSize = gameObject.maxSize;
   }
   /** 当たり判定の厳密な範囲 */
   get area(): PIXI.IShape {
-    return (this.#targetSprite.hitArea as PIXI.IShape) ?? this.spriteRect;
+    return (
+      (this.#targetSprite?.hitArea as PIXI.IShape) ??
+      this.spriteRect ??
+      new PIXI.Rectangle()
+    );
   }
   set area(col: PIXI.IShape) {
+    if (!this.#targetSprite) return;
     this.#targetSprite.hitArea = col;
   }
   /** 当たり判定から算出された矩形範囲（読み取り専用） */
@@ -42,25 +47,25 @@ export class ColliderManager {
     return new PIXI.Rectangle(
       this.spriteRect.x,
       this.spriteRect.y,
-      this.area.width ?? this.#maxSize.width,
-      this.area.height ?? this.#maxSize.height
+      this.area.width ?? this.#maxSize?.width ?? 0,
+      this.area.height ?? this.#maxSize?.height ?? 0
     );
   }
   /** スプライトの矩形範囲 */
   get spriteRect() {
     return new PIXI.Rectangle(
-      this.#targetSprite.x,
-      this.#targetSprite.y,
+      this.#targetSprite?.x ?? 0,
+      this.#targetSprite?.y ?? 0,
       this.#targetSprite?.width ?? 0,
       this.#targetSprite?.height ?? 0
     );
   }
   /** 左上基点の正方形を中央基点の円に変換 */
-  static boxToCircle(x, y, size) {
+  static boxToCircle(x: number, y: number, size: number) {
     return new PIXI.Circle(x + size / 2, y + size / 2, size / 2);
   }
   /** 左上基点の矩形を中央基点の楕円に変換 */
-  static rectToEclipse(x, y, width, height) {
+  static rectToEclipse(x: number, y: number, width: number, height: number) {
     return new PIXI.Ellipse(
       x + width / 2,
       y + height / 2,

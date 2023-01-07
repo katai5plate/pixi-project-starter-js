@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Size } from "../../components/Vector2";
+import { ModeOrVector2Like, Size, Vector2Like } from "../../components/Vector2";
 import { setOriginProcess } from "../../utils";
 
 /** テキスト */
@@ -18,15 +18,15 @@ export class Text extends PIXI.Text {
     );
   }
   /** 位置を設定 */
-  setPosition({ x, y }) {
+  setPosition({ x, y }: Vector2Like) {
     this.x = x;
     this.y = y;
   }
   /**
    * 原点（anchor）を設定する。
-   * @param {"CORNER" | "CENTER" | {x: number, y: number}} modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
+   * @param modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
    */
-  setOrigin(modeOrVec2) {
+  setOrigin(modeOrVec2: ModeOrVector2Like) {
     setOriginProcess(modeOrVec2, this, new Size(this.width, this.height));
   }
 }

@@ -7,16 +7,12 @@ import { RetryButton, TweetButton } from "./buttons";
  * ゲームの結果画面シーンを生成する関数
  */
 export class EndScene extends Scene {
-  message: BigLabel;
-  retryButton: RetryButton;
-  tweetButton: TweetButton;
-
   constructor() {
     super();
   }
   async start() {
     // 結果発表テキスト
-    this.message = new BigLabel({
+    const message = new BigLabel({
       text: `SCORE:${db.score}で力尽きた`,
       color: 0xfcbb08,
       position: engine.screen.grid(
@@ -26,10 +22,10 @@ export class EndScene extends Scene {
         1 / 3
       ),
     });
-    this.instantiate(this.message);
+    this.instantiate(message);
 
     // もう一度ボタン
-    this.retryButton = new RetryButton({
+    const retryButton = new RetryButton({
       position: engine.screen.grid(
         // 画面幅の 4 分の 1 の X 座標
         1 / 4,
@@ -37,10 +33,10 @@ export class EndScene extends Scene {
         5 / 6
       ),
     });
-    this.instantiate(this.retryButton); // ボタンを結果画面シーンに追加
+    this.instantiate(retryButton); // ボタンを結果画面シーンに追加
 
     // ツイートボタン
-    this.tweetButton = new TweetButton({
+    const tweetButton = new TweetButton({
       position: engine.screen.grid(
         // 画面幅の 4 分の 3 の X 座標
         3 / 4,
@@ -48,6 +44,6 @@ export class EndScene extends Scene {
         5 / 6
       ),
     });
-    this.instantiate(this.tweetButton); // ボタンを結果画面シーンに追加
+    this.instantiate(tweetButton); // ボタンを結果画面シーンに追加
   }
 }

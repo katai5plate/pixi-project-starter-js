@@ -4,8 +4,8 @@ import { GameObject } from "./GameObject";
 
 /** ゲームのシーン */
 export default class Scene {
-  /** 現在のシーン */
-  #scene: PIXI.Container = new PIXI.Container();
+  /** 現在のシーンコンテナ */
+  #sceneContainer: PIXI.Container = new PIXI.Container();
   /** テクスチャのキャッシュ */
   #cachedTextures: Map<string, PIXI.Texture | null> = new Map();
 
@@ -20,7 +20,7 @@ export default class Scene {
     // 毎フレームイベントを削除
     engine.app.clearGameLoops();
     // ゲームシーンを画面に設定
-    engine.app.setScene(this.#scene);
+    engine.app.setSceneContainer(this.#sceneContainer);
     // 初期処理を実行
     this.#init();
   }
@@ -41,16 +41,21 @@ export default class Scene {
    */
   instantiate(obj: GameObject | PIXI.DisplayObject) {
     if (obj instanceof GameObject) {
-      this.#scene.addChild(obj.view);
+      if (!obj.view)
+        throw new Error(
+          "DisplayObject が設定されていない GameObject は描画できません。"
+        );
+      this.#sceneContainer.addChild(obj.view);
     } else {
-      this.#scene.addChild(obj);
+      this.#sceneContainer.addChild(obj);
     }
   }
   /** プリロード済のテクスチャを呼び出す */
-  getTexture(path: string) {
-    if (!this.#cachedTextures.has(path))
+  getTexture(path: string): PIXI.Texture {
+    const texture = this.#cachedTextures.get(path);
+    if (!this.#cachedTextures.has(path) || !texture)
       throw new Error(`プリロードが行われていない Texture です: ${path}`);
-    return this.#cachedTextures.get(path);
+    return texture;
   }
   /** 初期処理を書く（上書き用） */
   async start() {}

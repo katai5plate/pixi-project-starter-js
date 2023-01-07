@@ -8,21 +8,24 @@ import { Ball } from "./Ball";
 /** ゲーム中のシーン */
 export class GameScene extends Scene {
   /** ボール */
-  ball: Ball;
+  ball?: Ball;
   /** スコアボード */
-  scoreboard: Scoreboard;
+  scoreboard?: Scoreboard;
 
+  // 初期処理
   constructor() {
     super([
       // プリロードするテクスチャ
       IMAGE_BALL,
     ]);
   }
+
+  // 最初のフレームで実行する処理
   async start() {
     // スコアを初期化する
     db.score = 0;
 
-    // ボール
+    // ボールをシーンに追加
     this.ball = new Ball({
       scene: this,
       position: engine.screen.grid(
@@ -34,24 +37,24 @@ export class GameScene extends Scene {
       // 速度
       velocity: new Vector2(5, 0),
     });
-    this.instantiate(this.ball); // ボールをシーンに追加
-
-    // スコア表示テキスト
+    this.instantiate(this.ball);
+    // スコア表示テキストを画面に追加する
     this.scoreboard = new Scoreboard({
       text: "SCORE: 0",
       color: 0xffffff,
       position: new Vector2(0, 0),
     });
-    this.instantiate(this.scoreboard); // スコア表示テキストを画面に追加する
+    this.instantiate(this.scoreboard);
   }
+
   // 毎フレームごとに処理するゲームループ
   update() {
     // スコアテキストを毎フレームアップデートする
-    this.scoreboard.text = `SCORE: ${db.score}`;
+    this.scoreboard!.text = `SCORE: ${db.score}`;
 
     if (db.score === 0) return; // スコアが０の時(球に触っていないとき)はここで終了させる
 
     // ボールの挙動を毎フレームアップデートする
-    this.ball.update();
+    this.ball!.update();
   }
 }

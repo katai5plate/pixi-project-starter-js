@@ -4,7 +4,7 @@ import { db, engine } from "../database";
 /** 描画エンジンの設定 */
 export class AppManager extends PIXI.Application {
   gameLoops: Set<() => void> = new Set();
-  #scene: PIXI.Container | null = null;
+  #sceneContainer: PIXI.Container | null = null;
   #debugLayer: PIXI.Graphics | null = null;
   isDebug: boolean;
   /**
@@ -67,7 +67,7 @@ export class AppManager extends PIXI.Application {
   }
   /** 現在のシーン（読み取り専用） */
   get currentScene() {
-    return this.#scene;
+    return this.#sceneContainer;
   }
   /**
    * デバッグ用レイヤー
@@ -87,16 +87,16 @@ export class AppManager extends PIXI.Application {
       this.stage.removeChild(scene);
     }
     // デバッグ用レイヤーを消す
-    if (this.isDebug) {
+    if (this.#debugLayer) {
       this.stage.removeChild(this.#debugLayer);
       this.#debugLayer = null;
     }
   }
-  /** シーンを設定する */
-  setScene(scene) {
+  /** シーンのコンテナを設定する */
+  setSceneContainer(container: PIXI.Container) {
     this.clearScene();
-    this.#scene = scene;
-    this.stage.addChild(this.#scene);
+    this.#sceneContainer = container;
+    this.stage.addChild(this.#sceneContainer);
     // デバッグ用に図形を書き込めるレイヤーを挟む
     if (this.isDebug) {
       this.#debugLayer = new PIXI.Graphics();

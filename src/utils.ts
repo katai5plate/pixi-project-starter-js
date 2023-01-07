@@ -1,6 +1,8 @@
 import { GameObjectSprite } from "./components/GameObject";
 import { ModeOrVector2Like, Size } from "./components/Vector2";
 
+export type Exist<T> = Exclude<T, null | undefined>;
+
 /**
  * Twitter に送信する URL を生成する
  * @param text つぶやき内容
@@ -54,7 +56,7 @@ export const setOriginProcess = (
   }
   // pivot しかない場合
   else {
-    let x, y;
+    let x: number, y: number;
     const [width, height] = [maxSize?.x, maxSize?.y];
     if (!Number.isFinite(width) || !Number.isFinite(height))
       throw new Error(
