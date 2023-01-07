@@ -1,15 +1,12 @@
 import * as PIXI from "pixi.js";
-import Scene from "../components/Scene";
 import { db, engine } from "../database";
 
 /** 描画エンジンの設定 */
 export class AppManager extends PIXI.Application {
-  gameLoops = new Set();
-  /** @type {Scene?} */
-  #scene = null;
-  /** @type {PIXI.Graphics?} */
-  #debugLayer = null;
-  isDebug;
+  gameLoops: Set<() => void> = new Set();
+  #scene: PIXI.Container | null = null;
+  #debugLayer: PIXI.Graphics | null = null;
+  isDebug: boolean;
   /**
    * @param {Object} options
    * @param {number} options.width 幅
@@ -25,29 +22,36 @@ export class AppManager extends PIXI.Application {
     isPixelated,
     isDebug,
     ...options
-  }) {
+  }: {
+    width: number;
+    height: number;
+    backgroundColor: number;
+    isPixelated: boolean;
+    isDebug: boolean;
+  } & PIXI.IApplicationOptions) {
     // PIXI.JSアプリケーションを生成 (この数字はゲーム内の画面サイズ)
     super({ width, height, ...options });
 
     // index.htmlのbodyにapp.viewを追加する (this.viewはcanvasのdom要素)
-    document.body.appendChild(this.view);
+    document.body.appendChild(this.view as HTMLCanvasElement);
 
     // ゲームcanvasのcssを定義する
     // ここで定義した画面サイズ(width,height)は実際に画面に表示するサイズ
-    this.renderer.view.style.position = "relative";
-    this.renderer.view.style.width = `${width}px`;
-    this.renderer.view.style.height = `${height}px`;
-    this.renderer.view.style.display = "block";
+    const render = this.renderer.view as HTMLCanvasElement;
+    render.style.position = "relative";
+    render.style.width = `${width}px`;
+    render.style.height = `${height}px`;
+    render.style.display = "block";
 
     // canvasの周りを点線枠で囲う (canvasの位置がわかりやすいので入れている)
-    this.renderer.view.style.border = "2px dashed black";
+    render.style.border = "2px dashed black";
 
     // canvasの背景色
-    this.renderer.backgroundColor = backgroundColor ?? 0x000000;
+    (this.renderer as any).backgroundColor = backgroundColor ?? 0x000000;
 
     if (isPixelated) {
       // ドットをぼかさない
-      this.view.style.imageRendering = "pixelated";
+      (this.view as HTMLCanvasElement).style.imageRendering = "pixelated";
       PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
     }
 
@@ -55,10 +59,10 @@ export class AppManager extends PIXI.Application {
 
     // デバッグ用に様々なデータをコンソールでアクセス可能にする
     if (this.isDebug) {
-      window.PIXI = PIXI;
+      (window as any).PIXI = PIXI;
       // 参照時に最新の値を得るために関数にする
-      window.db = () => db;
-      window.engine = () => engine;
+      (window as any).db = () => db;
+      (window as any).engine = () => engine;
     }
   }
   /** 現在のシーン（読み取り専用） */
@@ -109,17 +113,17 @@ export class AppManager extends PIXI.Application {
     this.gameLoops.clear();
   }
   /** 毎フレーム処理を追加する */
-  addGameLoop(ticker) {
+  addGameLoop(ticker: () => void) {
     // 毎フレーム処理として指定した関数を追加
     this.ticker.add(ticker);
     // 追加した関数は配列に保存する（後で登録を解除する時に使う）
     this.gameLoops.add(ticker);
   }
   /** 毎フレーム処理を削除する */
-  removeGameLoop(ticker) {
+  removeGameLoop(ticker: () => void) {
     // 毎フレーム処理として指定した関数を追加
     this.ticker.remove(ticker);
     // 追加した関数は配列に保存する（後で登録を解除する時に使う）
-    this.gameLoops.remove(ticker);
+    this.gameLoops.delete(ticker);
   }
 }

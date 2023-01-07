@@ -1,17 +1,18 @@
-import * as PIXI from "pixi.js";
-import { Size } from "./components/Vector2";
-
-/** 値が null か undefined かどうか */
-export const isVoid = (value) => value === null || value === undefined;
+import { GameObjectSprite } from "./components/GameObject";
+import { ModeOrVector2Like, Size } from "./components/Vector2";
 
 /**
  * Twitter に送信する URL を生成する
- * @param {string} text つぶやき内容
- * @param {string[]?} hashtags ツイートに載せるハッシュタグ
- * @param {string?} url ツイートに載せる URL
+ * @param text つぶやき内容
+ * @param hashtags ツイートに載せるハッシュタグ
+ * @param url ツイートに載せる URL
  * @returns
  */
-export const makeTwitterShareUrl = (text, hashtags, url) => {
+export const makeTwitterShareUrl = (
+  text: string,
+  hashtags?: string[],
+  url?: string
+) => {
   let result = "http://twitter.com/intent/tweet";
   // 特殊文字がある可能性があるのでエンコードする
   result += `?text=${encodeURI(text)}`;
@@ -27,11 +28,15 @@ export const makeTwitterShareUrl = (text, hashtags, url) => {
 
 /**
  * 原点を設定する計算処理
- * @param {"CORNER" | "CENTER" | {x: number, y: number}} modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
- * @param {PIXI.DisplayObject | PIXI.Sprite} displayObject 設定先のオブジェクト
- * @param {Size} maxSize 幅高が存在しない場合の基準サイズ
+ * @param modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
+ * @param displayObject 設定先のオブジェクト
+ * @param maxSize 幅高が存在しない場合の基準サイズ
  */
-export const setOriginProcess = (modeOrVec2, displayObject, maxSize) => {
+export const setOriginProcess = (
+  modeOrVec2: ModeOrVector2Like,
+  displayObject: GameObjectSprite,
+  maxSize: Size
+) => {
   // anchor が存在する場合
   if (displayObject.anchor) {
     // 統一するために pivot は 0 にする

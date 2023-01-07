@@ -9,23 +9,25 @@ import { EndScene } from "../EndScene";
 
 /** ボール画像を表示するスプライトで作ったゲームオブジェクト */
 export class Ball extends GameObject {
-  /**
-   * @param {Object} _
-   * @param {Scene} _.scene シーン
-   * @param {Vector2} _.position 初期座標
-   * @param {Vector2} _.velocity 初期速度
-   */
-  constructor({ scene, position, velocity }) {
+  constructor({
+    scene,
+    position,
+    velocity,
+  }: {
+    scene: Scene;
+    position: Vector2;
+    velocity: Vector2;
+  }) {
     super(new PIXI.Sprite(scene.getTexture(IMAGE_BALL)));
     // onUpdate で rect を使用してバウンド処理を実装するため原点を左上にする
     this.setOrigin("CORNER");
     // ボールの物理挙動を設定する
     this.setPhysics({
       // 左上原点なので、ボールの幅高の半分ずらすことで、指定座標がボールの中央になるようにする
-      position: position.sub(
-        this.colliderRect.width / 2,
-        this.colliderRect.height / 2
-      ),
+      position: position.calc((prev) => ({
+        x: prev.x - this.colliderRect.width / 2,
+        y: prev.y - this.colliderRect.height / 2,
+      })),
       velocity,
       // 物理エンジン実行中に毎フレーム発動する関数
       onUpdate: () => {

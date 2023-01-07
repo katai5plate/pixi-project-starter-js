@@ -7,12 +7,9 @@ import { RetryButton, TweetButton } from "./buttons";
  * ゲームの結果画面シーンを生成する関数
  */
 export class EndScene extends Scene {
-  /** @type {BigLabel} */
-  message;
-  /** @type {RetryButton} */
-  retryButton;
-  /** @type {TweetButton} */
-  tweetButton;
+  message: BigLabel;
+  retryButton: RetryButton;
+  tweetButton: TweetButton;
 
   constructor() {
     super();

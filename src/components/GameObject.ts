@@ -2,26 +2,24 @@ import * as PIXI from "pixi.js";
 import { ColliderManager } from "../managers/ColliderManager";
 import { PhysicsManager } from "../managers/PhysicsManager";
 import { setOriginProcess } from "../utils";
-import { Vector2 } from "./Vector2";
+import { ModeOrVector2Like, Size, Vector2, Vector2Setter } from "./Vector2";
 
-/**
- * @typedef {import("./Vector2").Vector2Like} Vector2Like
- */
+export type GameObjectSprite = PIXI.DisplayObject & {
+  width?: number;
+  height?: number;
+  anchor?: PIXI.ObservablePoint;
+};
 
 /** 当たり判定と物理演算が可能な画像オブジェクト */
 export class GameObject {
-  /** @type {PIXI.DisplayObject} */
-  #displayObject;
-  /** @type {ColliderManager} */
-  #collider;
-  /** @type {PhysicsManager} */
-  #physics;
-  /** @type {Vector2} */
-  #maxSize;
-  constructor(displayObject) {
+  #displayObject: GameObjectSprite;
+  #collider: ColliderManager;
+  #physics: PhysicsManager;
+  #maxSize: Size;
+  constructor(displayObject: PIXI.DisplayObject) {
     this.setDisplayObject(displayObject);
   }
-  setDisplayObject(displayObject) {
+  setDisplayObject(displayObject: PIXI.DisplayObject) {
     this.#displayObject = displayObject;
     this.#collider = this.#displayObject
       ? new ColliderManager(this.#displayObject, this.#maxSize)
@@ -39,13 +37,16 @@ export class GameObject {
   }
   /**
    * 物理設定を変更する
-   * @param {{
-   *   position: Vector2Like | (prev: Vector2) => Vector2Like,
-   *   velocity: Vector2Like | (prev: Vector2) => Vector2Like,
-   *   onUpdate: () => void
-   * }} params
    */
-  setPhysics({ position, velocity, onUpdate }) {
+  setPhysics({
+    position,
+    velocity,
+    onUpdate,
+  }: {
+    position?: Vector2Setter;
+    velocity?: Vector2Setter;
+    onUpdate?: () => void;
+  }) {
     this.#validDisplayObject();
     if (position)
       this.#physics.position =
@@ -60,17 +61,15 @@ export class GameObject {
     if (onUpdate) this.#physics.onUpdate(onUpdate);
   }
   /**
-   * 位置を設定する。（setPhysics の position 指定のショートハンド）
-   * @param {Vector2Like | (prev: Vector2) => Vector2Like} position
+   * 位置を設定する。（setPhysics の position 指定のショートハンド
    */
-  setPosition(position) {
+  setPosition(position: Vector2Setter) {
     this.setPhysics({ position });
   }
   /**
-   * 当たり判定の範囲を指定する
-   * @param {PIXI.IShape} area
+   * 当たり判定の範囲を指定す
    */
-  setCollider(area) {
+  setCollider(area: PIXI.IShape) {
     this.#validDisplayObject();
     this.#collider.area = area;
   }
@@ -81,10 +80,8 @@ export class GameObject {
   }
   /**
    * マウスでクリックできるようにする
-   * @param {boolean} enable
-   * @param {string} cursor
    */
-  setButtonMode(enable, cursor = "default") {
+  setButtonMode(enable: boolean, cursor = "default") {
     this.#validDisplayObject();
     this.#displayObject.interactive = enable;
     this.#displayObject.cursor = enable ? cursor : "default";
@@ -96,11 +93,11 @@ export class GameObject {
    * - PIXI.BitmapText
    * - PIXI.TilingSprite
    * - PIXI.AnimatedSprite
-   * @param {number} width 幅
-   * @param {number} height 高さ
+   * @param width 幅
+   * @param height 高さ
    */
-  setMaxSize(width, height) {
-    this.#maxSize = new Vector2(width, height);
+  setMaxSize(width: number, height: number) {
+    this.#maxSize = new Size(width, height);
   }
   /**
    * 原点を設定する。anchor が無い場合は代わりに pivot を設定する
@@ -110,9 +107,9 @@ export class GameObject {
    *   - PIXI.BitmapText
    *   - PIXI.TilingSprite
    *   - PIXI.AnimatedSprite
-   * @param {"CORNER" | "CENTER" | {x: number, y: number}} modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
+   * @param modeOrVec2 アンカー設定（Vector2 の場合は 0 ~ 1）
    */
-  setOrigin(modeOrVec2) {
+  setOrigin(modeOrVec2: ModeOrVector2Like) {
     setOriginProcess(modeOrVec2, this.#displayObject, this.#maxSize);
   }
   /** 位置を取得（読み取り専用） */
@@ -137,25 +134,22 @@ export class GameObject {
   }
   /**
    * DisplayObject にイベントを設定する
-   *  @type {PIXI.DisplayObject["on"]}
    */
-  on(...args) {
+  on(...args: Parameters<PIXI.DisplayObject["on"]>) {
     this.#validDisplayObject();
     return this.#displayObject.on(...args);
   }
   /**
    * DisplayObject のイベントを解除する
-   * @type {PIXI.DisplayObject["off"]}
    */
-  off(...args) {
+  off(...args: Parameters<PIXI.DisplayObject["off"]>) {
     this.#validDisplayObject();
     return this.#displayObject.off(...args);
   }
   /**
    * DisplayObject にワンタイムイベントを設定する
-   * @type {PIXI.DisplayObject["once"]}
    */
-  once(...args) {
+  once(...args: Parameters<PIXI.DisplayObject["once"]>) {
     this.#validDisplayObject();
     return this.#displayObject.once(...args);
   }

@@ -23,7 +23,7 @@
   "homepage": "https://github.com/katai5plate/pixi-project-starter-js#readme",
   "dependencies": {
     "parcel": "^2.8.0",
-    "pixi.js": "^7.0.4",
+    "pixi.js": "^7.0.5",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
@@ -32,6 +32,7 @@
     "process": "^0.11.10",
     "punycode": "^1.4.1",
     "querystring-es3": "^0.2.1",
+    "typescript": "^4.9.4",
     "url": "^0.11.0"
   },
   "parcel-namer-custom": {

@@ -1,15 +1,12 @@
 import { Button } from "../../components/Button";
+import { Vector2 } from "../../components/Vector2";
 import { db } from "../../database";
 import { makeTwitterShareUrl } from "../../utils";
 import { GameScene } from "../GameScene";
 
 /** もう一度ボタン */
 export class RetryButton extends Button {
-  /**
-   * @param {Object} _
-   * @param {Vector2} _.position 座標
-   */
-  constructor({ position }) {
+  constructor({ position }: { position: Vector2 }) {
     super("もう一度", 100, 60, 0xff0000, () => {
       // クリックした時の処理
       new GameScene(); // ゲームシーンに遷移する
@@ -23,11 +20,7 @@ export class RetryButton extends Button {
 
 /** ツイートボタン */
 export class TweetButton extends Button {
-  /**
-   * @param {Object} _
-   * @param {Vector2} _.position 座標
-   */
-  constructor({ position }) {
+  constructor({ position }: { position: Vector2 }) {
     super("ツイート", 100, 60, 0x0000ff, () => {
       // 新しいウィンドウを開く
       window.open(

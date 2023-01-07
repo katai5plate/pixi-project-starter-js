@@ -4,12 +4,7 @@ import { setOriginProcess } from "../../utils";
 
 /** テキスト */
 export class Text extends PIXI.Text {
-  /**
-   * @param {string} text テキスト
-   * @param {number} fontSize フォントサイズ
-   * @param {number} color 色 0x123456
-   */
-  constructor(text, fontSize, color) {
+  constructor(text: string, fontSize: number, color: number) {
     super(
       text,
       // テキストに関するパラメータを定義する(ここで定義した他にもたくさんパラメータがある)

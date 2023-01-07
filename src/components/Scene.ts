@@ -5,14 +5,14 @@ import { GameObject } from "./GameObject";
 /** ゲームのシーン */
 export default class Scene {
   /** 現在のシーン */
-  #scene = new PIXI.Container();
+  #scene: PIXI.Container = new PIXI.Container();
   /** テクスチャのキャッシュ */
-  #cachedTextures = new Map();
+  #cachedTextures: Map<string, PIXI.Texture | null> = new Map();
 
   /**
-   * @param {string[]} texturePaths プリロードするテクスチャの参照リスト
+   * @param texturePaths プリロードするテクスチャの参照リスト
    */
-  constructor(texturePaths = []) {
+  constructor(texturePaths: string[] = []) {
     // プリロード予定のテクスチャを記録する
     texturePaths.forEach((path) => {
       this.#cachedTextures.set(path, null);
@@ -28,7 +28,7 @@ export default class Scene {
   async #init() {
     // テクスチャをプリロード
     for (const path of this.#cachedTextures.keys()) {
-      this.#cachedTextures.set(path, await PIXI.Texture.fromLoader(path));
+      this.#cachedTextures.set(path, await PIXI.Texture.fromLoader(path, path));
     }
     // start関数を実行
     await this.start();
@@ -37,9 +37,9 @@ export default class Scene {
   }
   /**
    * シーンにオブジェクトを描画
-   * @param {GameObject | PIXI.DisplayObject} obj
+   * @param obj
    */
-  instantiate(obj) {
+  instantiate(obj: GameObject | PIXI.DisplayObject) {
     if (obj instanceof GameObject) {
       this.#scene.addChild(obj.view);
     } else {
@@ -47,7 +47,7 @@ export default class Scene {
     }
   }
   /** プリロード済のテクスチャを呼び出す */
-  getTexture(path) {
+  getTexture(path: string) {
     if (!this.#cachedTextures.has(path))
       throw new Error(`プリロードが行われていない Texture です: ${path}`);
     return this.#cachedTextures.get(path);

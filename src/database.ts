@@ -2,10 +2,14 @@ import { AppManager } from "./managers/AppManager";
 import { ScreenManager } from "./managers/ScreenManager";
 
 const app = new AppManager({
+  // ゲーム画面の幅高
   width: 400,
   height: 600,
+  // ゲーム画面のデフォルト背景
   backgroundColor: 0x333333,
+  // ドットのぼけを防止するか
   isPixelated: false,
+  // デバッグ機能を有効にするか
   isDebug: true,
 });
 const screen = new ScreenManager(app);

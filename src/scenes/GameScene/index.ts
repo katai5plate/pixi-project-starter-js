@@ -7,16 +7,10 @@ import { Ball } from "./Ball";
 
 /** ゲーム中のシーン */
 export class GameScene extends Scene {
-  /**
-   * ボール
-   * @type {Ball}
-   */
-  ball;
-  /**
-   * スコアボード
-   * @type {Scoreboard}
-   */
-  scoreboard;
+  /** ボール */
+  ball: Ball;
+  /** スコアボード */
+  scoreboard: Scoreboard;
 
   constructor() {
     super([

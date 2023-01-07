@@ -8,10 +8,8 @@ import { GameScene } from "../GameScene";
  * ゲームの結果画面シーンを生成する関数
  */
 export class TitleScene extends Scene {
-  /** @type {BigLabel} */
-  message;
-  /** @type {Button} */
-  startButton;
+  message: BigLabel;
+  startButton: Button;
 
   constructor() {
     super();

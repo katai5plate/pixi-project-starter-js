@@ -1,20 +1,20 @@
 import * as PIXI from "pixi.js";
+import { GameObjectSprite } from "../components/GameObject";
+import { Size } from "../components/Vector2";
 
 /** 当たり判定設定 */
 export class ColliderManager {
-  /** @type {PIXI.DisplayObject} */
-  #targetSprite;
-  #maxSize;
-  constructor(targetSprite, maxSize) {
+  #targetSprite: GameObjectSprite;
+  #maxSize: Size;
+  constructor(targetSprite: GameObjectSprite, maxSize: Size) {
     this.#targetSprite = targetSprite;
     this.#maxSize = maxSize;
-    this.collision = this.spriteRect;
   }
   /** 当たり判定の厳密な範囲 */
-  get area() {
-    return this.#targetSprite.hitArea ?? this.spriteRect;
+  get area(): PIXI.IShape {
+    return (this.#targetSprite.hitArea as PIXI.IShape) ?? this.spriteRect;
   }
-  set area(col) {
+  set area(col: PIXI.IShape) {
     this.#targetSprite.hitArea = col;
   }
   /** 当たり判定から算出された矩形範囲（読み取り専用） */
@@ -34,6 +34,10 @@ export class ColliderManager {
         this.area.width * 2,
         this.area.height * 2
       );
+    }
+    if (this.area instanceof PIXI.Polygon) {
+      // あとで書く
+      return new PIXI.Rectangle();
     }
     return new PIXI.Rectangle(
       this.spriteRect.x,

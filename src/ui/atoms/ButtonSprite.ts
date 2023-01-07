@@ -4,13 +4,7 @@ import { Text } from "./Text";
 
 /** 簡易ボタン */
 export class ButtonSprite extends PIXI.Container {
-  /**
-   * @param {string} text テキスト
-   * @param {number} width 横幅
-   * @param {number} height 縦幅
-   * @param {number} color 色 `0x123456`
-   */
-  constructor(text, width, height, color) {
+  constructor(text: string, width: number, height: number, color: number) {
     super();
 
     // 文字サイズ
