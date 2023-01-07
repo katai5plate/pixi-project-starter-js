@@ -21,12 +21,16 @@ export class Ball extends GameObject {
     this.setOrigin("CORNER");
     // ボールの物理挙動を設定する
     this.setPhysics({
-      position,
+      // 左上原点なので、ボールの幅高の半分ずらすことで、指定座標がボールの中央になるようにする
+      position: position.sub(
+        this.colliderRect.width / 2,
+        this.colliderRect.height / 2
+      ),
       velocity,
       // 物理エンジン実行中に毎フレーム発動する関数
       onUpdate: () => {
         const { screen } = engine;
-        const { position, rect } = this;
+        const { position, colliderRect: rect } = this;
         // ボールの右端が画面右端を超えた場合
         if (rect.right > screen.right) {
           this.setPhysics({
@@ -55,7 +59,7 @@ export class Ball extends GameObject {
       },
     });
     // 当たり判定を円形にする
-    this.setColliderArea(ColliderManager.boxToCircle(0, 0, this.rect.width));
+    this.setCollider(ColliderManager.boxToCircle(0, 0, this.rect.width));
     // マウスでクリックできるようにする
     this.setButtonMode(true, "pointer");
     // クリック時に発動する関数

@@ -24,7 +24,7 @@ export class GameObject {
   setDisplayObject(displayObject) {
     this.#displayObject = displayObject;
     this.#collider = this.#displayObject
-      ? new ColliderManager(this.#displayObject)
+      ? new ColliderManager(this.#displayObject, this.#maxSize)
       : undefined;
     this.#physics = this.#displayObject
       ? new PhysicsManager(this.#displayObject)
@@ -70,9 +70,14 @@ export class GameObject {
    * 当たり判定の範囲を指定する
    * @param {PIXI.IShape} area
    */
-  setColliderArea(area) {
+  setCollider(area) {
     this.#validDisplayObject();
     this.#collider.area = area;
+  }
+  /** 当たり判定の矩形範囲（読み取り専用） */
+  get colliderRect() {
+    this.#validDisplayObject();
+    return this.#collider.areaRect;
   }
   /**
    * マウスでクリックできるようにする
@@ -118,7 +123,7 @@ export class GameObject {
   /** 画像の矩形を取得（読み取り専用） */
   get rect() {
     this.#validDisplayObject();
-    return this.#collider.rect;
+    return this.#collider.spriteRect;
   }
   /** 当たり判定を取得（読み取り専用） */
   get colliderArea() {
